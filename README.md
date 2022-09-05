@@ -10,12 +10,19 @@ AndME launcher is an extremely minimalistic launcher for Android, inspired by th
 - Remove applications by pressing and holding an app by it's logo (center of tile) on the homescreen (first page).
 - Reorder applications by dragging from the edges of an app (border of tile) on the homescreen (first page).
 
-Do you want to display more columns in the app grid? Or change the colors of the application? At the moment this application does not include a settings screen. However, you can change properties by opening the project in Android Studio and configuring your desired settings from opening the "AppDefaults" class.
-
 # Usage
 Download, sideload and launch the apk from your Android device.
 
 [Releases](https://github.com/jetspiking/AndME/releases)
+
+# Customization
+At the moment this application does not include a settings screen. However, you can change properties by opening the project in Android Studio and configuring your desired settings from opening the "AppDefaults" class. The adjustable properties include the following:
+
+- Theme accent color
+- Tile span count
+- Tile border margin
+- Tile list margin
+- Opacity
 
 # Thank you for using AndME Launcher
 If you enjoy AndME Launcher and you feel like you want to support me extra, you could consider buying me a drink by navigating to my Buy Me A Coffee account.
