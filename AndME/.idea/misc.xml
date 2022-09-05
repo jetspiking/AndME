@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/dusti/Downloads/Metrosquarelauncher/TileLauncher/app/src/main/res/drawable-v24/cu_et_input.xml" value="0.203" />
+        <entry key="..\:/Users/dusti/Downloads/Metrosquarelauncher/TileLauncher/app/src/main/res/drawable-v24/ic_launcher_background.xml" value="0.231" />
+        <entry key="..\:/Users/dusti/Downloads/Metrosquarelauncher/TileLauncher/app/src/main/res/drawable-v24/seekbar_custom_thumb.xml" value="0.203" />
+        <entry key="..\:/Users/dusti/Downloads/Metrosquarelauncher/TileLauncher/app/src/main/res/drawable-v24/seekbar_progress.xml" value="0.203" />
+        <entry key="..\:/Users/dusti/Downloads/Metrosquarelauncher/TileLauncher/app/src/main/res/drawable/cu_et_input.xml" value="0.203" />
+        <entry key="..\:/Users/dusti/Downloads/Metrosquarelauncher/TileLauncher/app/src/main/res/drawable/ic_backbuttonblack_black.xml" value="0.199" />
+        <entry key="..\:/Users/dusti/Downloads/Metrosquarelauncher/TileLauncher/app/src/main/res/drawable/ic_backbuttonblack_white.xml" value="0.199" />
+        <entry key="..\:/Users/dusti/Downloads/Metrosquarelauncher/TileLauncher/app/src/main/res/drawable/ic_launcher_background.xml" value="0.199" />
+        <entry key="..\:/Users/dusti/Downloads/Metrosquarelauncher/TileLauncher/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.199" />
+        <entry key="..\:/Users/dusti/Downloads/Metrosquarelauncher/TileLauncher/app/src/main/res/drawable/ic_unpinwhite.xml" value="0.199" />
+        <entry key="..\:/Users/dusti/Downloads/Metrosquarelauncher/TileLauncher/app/src/main/res/drawable/seekbar_custom_thumb.xml" value="0.203" />
+        <entry key="..\:/Users/dusti/Downloads/Metrosquarelauncher/TileLauncher/app/src/main/res/drawable/seekbar_progress.xml" value="0.203" />
+        <entry key="..\:/Users/dusti/Downloads/Metrosquarelauncher/TileLauncher/app/src/main/res/layout/fragment_launcher_applist.xml" value="0.5" />
+        <entry key="..\:/Users/dusti/Downloads/Metrosquarelauncher/TileLauncher/app/src/main/res/layout/fragment_launcher_content_pager.xml" value="0.2591414944356121" />
+        <entry key="..\:/Users/dusti/Downloads/Metrosquarelauncher/TileLauncher/app/src/main/res/layout/fragment_launcher_dashboard.xml" value="0.3278985507246377" />
+        <entry key="..\:/Users/dusti/Downloads/Metrosquarelauncher/TileLauncher/app/src/main/res/layout/fragment_launcher_tilehome.xml" value="0.25" />
+        <entry key="..\:/Users/dusti/Downloads/Metrosquarelauncher/TileLauncher/app/src/main/res/layout/fragment_launcher_tiles.xml" value="0.15260416666666668" />
+        <entry key="..\:/Users/dusti/Downloads/Metrosquarelauncher/TileLauncher/app/src/main/res/layout/item_dialog_longpress.xml" value="0.3278985507246377" />
+        <entry key="..\:/Users/dusti/Downloads/Metrosquarelauncher/TileLauncher/app/src/main/res/layout/item_launcher_applisting.xml" value="0.22" />
+        <entry key="..\:/Users/dusti/Downloads/Metrosquarelauncher/TileLauncher/app/src/main/res/layout/item_launcher_settings.xml" value="0.3278985507246377" />
+        <entry key="..\:/Users/dusti/Downloads/Metrosquarelauncher/TileLauncher/app/src/main/res/layout/item_launcher_tile.xml" value="0.3278985507246377" />
+        <entry key="..\:/Users/dusti/Downloads/Metrosquarelauncher/TileLauncher/app/src/main/res/layout/item_settings_colorpick.xml" value="0.3278985507246377" />
+        <entry key="..\:/Users/dusti/Downloads/Metrosquarelauncher/TileLauncher/app/src/main/res/layout/item_settings_colorpicker.xml" value="0.3278985507246377" />
+        <entry key="..\:/Users/dusti/Downloads/Metrosquarelauncher/TileLauncher/app/src/main/res/layout/item_settings_slidersetting.xml" value="0.3278985507246377" />
+        <entry key="..\:/Users/dusti/Downloads/Metrosquarelauncher/TileLauncher/app/src/main/res/layout/item_widget.xml" value="0.3278985507246377" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
