@@ -2,8 +2,7 @@
 [![License](https://img.shields.io/github/license/jetspiking/AndME.svg)]()
 [![Stars](https://img.shields.io/github/stars/jetspiking/AndME.svg)]()
 
-# Android Minimal Edition Launcher
-<img src="https://raw.githubusercontent.com/jetspiking/AndME/main/Images/icon.png" width="64" height="64">
+# Android Minimal Edition Launcher <img src="https://raw.githubusercontent.com/jetspiking/AndME/main/Images/icon.png" width="64" height="64">
 
 <img src="https://raw.githubusercontent.com/jetspiking/AndME/main/Images/HomePage.jpg" width="200" height="444">  <img src="https://raw.githubusercontent.com/jetspiking/AndME/main/Images/AppsPage.jpg" width="200" height="444">  <img src="https://raw.githubusercontent.com/jetspiking/AndME/main/Images/FilterPage.jpg" width="200" height="444">
 
