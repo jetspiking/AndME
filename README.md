@@ -17,7 +17,8 @@ AndME launcher is an extremely minimalistic launcher for Android, inspired by th
 Do you want to display more columns in the app grid? Or change the colors of the application? At the moment this application does not include a settings screen. However, you can change properties by opening the project in Android Studio and configuring your desired settings from opening the "AppDefaults" class.
 
 # Usage
-Download and launch the apk from your Android device.
+Download, sideload and launch the apk from your Android device.
+
 [Releases](https://github.com/jetspiking/AndME/releases)
 
 # Thank you for using AndME Launcher
