@@ -16,13 +16,14 @@ Download, sideload and launch the apk from your Android device.
 [Releases](https://github.com/jetspiking/AndME/releases)
 
 # Customization
-At the moment this application does not include a settings screen. However, you can change properties by opening the project in Android Studio and configuring your desired settings from opening the "AppDefaults" class. The adjustable properties include the following:
+Version 1.0.0 added customization to the launcher. The following can be adjusted:
 
-- Theme accent color
 - Tile span count
-- Tile border margin
-- Tile list margin
-- Opacity
+- Accent color (ARGB)
+- Background color (ARGB)
+- Text color (ARGB)
+- Show or hide icons in app list
+- Show or hide navigation bar
 
 # Thank you for using AndME Launcher
 If you enjoy AndME Launcher and you feel like you want to support me extra, you could consider buying me a drink by navigating to my Buy Me A Coffee account.
