@@ -1,18 +1,21 @@
 package com.dustinhendriks.andme;
 
 import android.appwidget.AppWidgetManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
 import com.dustinhendriks.andme.adapters.LauncherViewPageAdapter;
+import com.dustinhendriks.andme.utils.AppMiscDefaults;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+/**
+ * Contains the application data and acts as facade class by providing some handling methods.
+ */
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "MainActivity";
     private ViewPager mViewPager;
     public static AppWidgetManager mAppWidgetManager;
     private LauncherViewPageAdapter mPageAdapter;
@@ -21,21 +24,39 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestFullscreen();
+
+        if (!AppMiscDefaults.SHOW_NAVIGATION_BAR)
+            requestFullscreen();
         setContentView(R.layout.fragment_launcher_content_pager);
         ViewPager viewPager = findViewById(R.id.fragment_launcher_content_vp_viewpager);
         LauncherViewPageAdapter adapter = new LauncherViewPageAdapter(getSupportFragmentManager(), FragmentPagerAdapter.POSITION_UNCHANGED);
         mViewPager = viewPager;
         mViewPager.setOffscreenPageLimit(LauncherViewPageAdapter.NUMBER_OF_PAGES);
         mPageAdapter = adapter;
+        viewPager.setBackgroundColor(AppMiscDefaults.BACKGROUND_COLOR);
         viewPager.setAdapter(adapter);
         mViewPager.setCurrentItem(LauncherViewPageAdapter.PAGE_HOME);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            getWindow().setNavigationBarColor(AppMiscDefaults.BACKGROUND_COLOR);
         initializeWidgetHostManager();
         MAIN_ACTIVITY = this;
     }
 
-    public static void backToApps() {
-        MAIN_ACTIVITY.mViewPager.setCurrentItem(LauncherViewPageAdapter.PAGE_HOME+1, true);
+    public static void reloadLauncher() {
+        MAIN_ACTIVITY.finish();
+        MAIN_ACTIVITY.startActivity(MAIN_ACTIVITY.getIntent());
+    }
+
+    public static void scrollToApps() {
+        MAIN_ACTIVITY.mViewPager.setCurrentItem(LauncherViewPageAdapter.PAGE_HOME + 1, true);
+    }
+
+    public static void scrollToHome() {
+        MAIN_ACTIVITY.mViewPager.setCurrentItem(LauncherViewPageAdapter.PAGE_HOME, true);
+    }
+
+    public static void scrollToSettings() {
+        MAIN_ACTIVITY.mViewPager.setCurrentItem(LauncherViewPageAdapter.PAGE_HOME+2, true);
     }
 
     public static void serializeData() {
@@ -43,14 +64,23 @@ public class MainActivity extends AppCompatActivity {
             MAIN_ACTIVITY.mPageAdapter.launcherTilesHomeFragment.mLauncherTilesFragment.storeData();
     }
 
-    public static void notifyDataSetUpdate() {
-        if (MAIN_ACTIVITY.mPageAdapter.launcherApplistFragment != null)
-            MAIN_ACTIVITY.mPageAdapter.launcherTilesHomeFragment.mLauncherTilesFragment.notifyDataSetUpdate();
+    public static void notifyDataSetTilesUpdate() {
+        MAIN_ACTIVITY.mPageAdapter.launcherTilesHomeFragment.mLauncherTilesFragment.notifyDataSetUpdate();
     }
 
+    public static void notifyDataSetAppListUpdate() {
+        MAIN_ACTIVITY.mPageAdapter.launcherApplistFragment.notifyUpdatedUI();
+    }
+
+    /**
+     * Hide the application navigation bar, by requesting fullscreen.
+     */
     public void requestFullscreen() {
         View decorView = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        int uiOptions = 0;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+            uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        } else uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
         decorView.setSystemUiVisibility(uiOptions);
     }
 
@@ -59,34 +89,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        requestFullscreen();
-        super.onRestoreInstanceState(savedInstanceState);
-    }
-
-    @Override
-    protected void onPostResume() {
-        requestFullscreen();
-        super.onPostResume();
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        requestFullscreen();
-        super.onWindowFocusChanged(hasFocus);
-    }
-
-    @Override
     public void onBackPressed() {
+        scrollToHome();
     }
 }

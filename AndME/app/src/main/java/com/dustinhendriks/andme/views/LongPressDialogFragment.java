@@ -3,69 +3,69 @@ package com.dustinhendriks.andme.views;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.dustinhendriks.andme.R;
+import com.dustinhendriks.andme.utils.AppMiscDefaults;
 
+/**
+ * Creates a dialog with button that should be used as confirmation or settings popup.
+ */
 public class LongPressDialogFragment {
-    private AlertDialog dialog;
-    private TextView option1;
-    private TextView option2;
+    private View mView;
+    private AlertDialog mDialog;
+    private TextView mText;
 
-    public LongPressDialogFragment(Context context, String opt1, String opt2) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-        View view = View.inflate(context, R.layout.item_dialog_longpress, null);
-        option1 = (TextView) view.findViewById(R.id.item_dialog_longpress_tv_opt1);
-        option2 = (TextView) view.findViewById(R.id.item_dialog_longpress_tv_opt2);
-        setOption1Text(opt1);
-        setOption2Text(opt2);
-        alertDialogBuilder.setView(view);
-        dialog = alertDialogBuilder.create();
+    public LongPressDialogFragment(Context context, String text) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context, R.style.DialogTheme);
+        mView = View.inflate(context, R.layout.item_dialog_longpress, null);
+        mText = (TextView) mView.findViewById(R.id.item_dialog_longpress_tv_opt1);
+        mText.setTextColor(AppMiscDefaults.ACCENT_COLOR);
+        mView.setBackgroundColor(AppMiscDefaults.TEXT_COLOR);
+        setDialogOptionText(text);
+        alertDialogBuilder.setView(mView);
+        mDialog = alertDialogBuilder.create();
     }
 
-    public void show() {
-        dialog.show();
+    /**
+     * Show the dialog window at position y on the display.
+     * @param y Position on the vertical axis to display the dialog on.
+     */
+    public void show(int y) {
+        mDialog.show();
+        Window window = mDialog.getWindow();
+        window.setGravity(Gravity.TOP);
+        WindowManager.LayoutParams layoutParams = window.getAttributes();
+        layoutParams.y = y;
+        window.setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
     }
 
-    public void setOption1Text(String text) {
-        option1.setText(text);
+    public void dismiss() {
+        mDialog.dismiss();
     }
 
-    public void setOption2Text(String text) {
-        option2.setText(text);
+    public void setDialogOptionText(String text) {
+        mText.setText(text);
     }
 
     public void subscribeOption1(View.OnClickListener onClickListener) {
-        option1.setOnClickListener(new View.OnClickListener() {
+        mText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickListener.onClick(v);
-                dialog.dismiss();
-            }
-        });
-    }
-
-    public void hideOption2() {
-        option2.setVisibility(View.INVISIBLE);
-    }
-
-    public void hideOption1() {
-        option1.setVisibility(View.INVISIBLE);
-    }
-
-    public void subscribeOption2(View.OnClickListener onClickListener) {
-        option2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickListener.onClick(v);
-                dialog.dismiss();
+                mDialog.dismiss();
             }
         });
     }
 
     public void subscribeCancelListener(DialogInterface.OnCancelListener onCancelListener) {
-        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+        mDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
                 onCancelListener.onCancel(dialog);

@@ -2,9 +2,6 @@ package com.dustinhendriks.andme.adapters;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,16 +18,17 @@ import com.dustinhendriks.andme.R;
 import com.dustinhendriks.andme.interfaces.OnItemClickedListener;
 import com.dustinhendriks.andme.models.App;
 import com.dustinhendriks.andme.models.AppTile;
-import com.dustinhendriks.andme.utils.AppDefaults;
+import com.dustinhendriks.andme.utils.AppMiscDefaults;
 import com.dustinhendriks.andme.views.LauncherTilesFragment;
 import com.dustinhendriks.andme.views.LongPressDialogFragment;
 
 import java.util.ArrayList;
 
+/**
+ * The LauncherApplistingAdapter is responsible for showing the list of applications.
+ */
 public class LauncherApplistingAdapter extends RecyclerView.Adapter<LauncherApplistingAdapter.ViewHolder> {
-    private static final String TAG = "LauncherApplistingAdapt";
-
-    private ArrayList<App> mApps = new ArrayList<>();
+    private ArrayList<App> mApps;
     private Context mContext;
     private OnItemClickedListener mOnItemClickedListener;
 
@@ -44,30 +42,31 @@ public class LauncherApplistingAdapter extends RecyclerView.Adapter<LauncherAppl
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_launcher_applisting, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
-        view.getLayoutParams().height=125;
-        return viewHolder;
+        return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.mName.setText(mApps.get(holder.getAdapterPosition()).getName());
+        holder.mName.setTextColor(AppMiscDefaults.TEXT_COLOR);
         holder.mAppIcon.setImageDrawable(mApps.get(position).getAppIcon());
+        if (!AppMiscDefaults.SHOW_ICONS_IN_APPS_LIST)
+            holder.mAppIcon.setVisibility(View.GONE);
+        else holder.mAppIcon.setBackgroundColor(AppMiscDefaults.ACCENT_COLOR);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickedListener.clickedItem(mContext, mApps.get(holder.getAdapterPosition()), holder.getAdapterPosition());
+                mOnItemClickedListener.clickedItem(mContext, mApps.get(holder.getAdapterPosition()), holder);
             }
         });
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                LongPressDialogFragment longPressDialogFragment = new LongPressDialogFragment(mContext, "Pin to start", "App settings");
-                holder.itemView.setBackgroundColor(AppDefaults.THEME_ACCENT_COLOR);
+                LongPressDialogFragment longPressDialogFragment = new LongPressDialogFragment(mContext, mContext.getString(R.string.pin_to_start));
+                holder.itemView.setBackgroundColor(AppMiscDefaults.ACCENT_COLOR);
                 longPressDialogFragment.subscribeOption1(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d(TAG, "onClick: Adding tile.");
                         App app = mApps.get(holder.getAdapterPosition());
                         holder.itemView.setBackgroundColor(0);
                         LauncherTilesFragment.mTiles.add(new AppTile.Builder<AppTile>(
@@ -78,17 +77,7 @@ public class LauncherApplistingAdapter extends RecyclerView.Adapter<LauncherAppl
                                 .withApp(app)
                                 .build());
                         MainActivity.serializeData();
-                        MainActivity.notifyDataSetUpdate();
-                    }
-                });
-                longPressDialogFragment.subscribeOption2(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        holder.itemView.setBackgroundColor(0);
-                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                        Uri uri = Uri.fromParts("package", mApps.get(holder.getAdapterPosition()).getAppPackage().toString(), null);
-                        intent.setData(uri);
-                        mContext.startActivity(intent);
+                        MainActivity.notifyDataSetTilesUpdate();
                     }
                 });
                 longPressDialogFragment.subscribeCancelListener(new DialogInterface.OnCancelListener() {
@@ -97,7 +86,8 @@ public class LauncherApplistingAdapter extends RecyclerView.Adapter<LauncherAppl
                         holder.itemView.setBackgroundColor(0);
                     }
                 });
-                longPressDialogFragment.show();
+                // Show dialog in the top of the screen.
+                longPressDialogFragment.show(0);
                 return true;
             }
         });
@@ -117,7 +107,7 @@ public class LauncherApplistingAdapter extends RecyclerView.Adapter<LauncherAppl
             super(itemView);
             mConstraintLayout = itemView.findViewById(R.id.item_launcher_applisting_cl_constraintlayout);
             mName = itemView.findViewById(R.id.item_launcher_applisting_tv_appname);
-            mAppIcon= itemView.findViewById(R.id.item_launcher_applisting_iv_applogo);
+            mAppIcon = itemView.findViewById(R.id.item_launcher_applisting_iv_applogo);
         }
     }
 }

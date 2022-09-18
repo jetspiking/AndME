@@ -14,6 +14,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 
+/**
+ * Represents an application installed on the device. And keeps track of required data and arguments.
+ */
 public class App implements Serializable {
     private CharSequence name;
     private CharSequence appPackage;

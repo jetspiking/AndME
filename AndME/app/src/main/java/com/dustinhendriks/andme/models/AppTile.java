@@ -7,15 +7,13 @@ import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.UserHandle;
-import android.util.Log;
-
 import com.dustinhendriks.andme.interfaces.LaunchableTile;
-
 import java.io.Serializable;
-import java.util.Objects;
 
+/**
+ * Includes the launch function for starting an application as new activity.
+ */
 public class AppTile extends Tile implements LaunchableTile<Activity>, Serializable {
-    private static final String TAG = "AppTile";
     private App app;
 
     public AppTile(Builder builder) {

@@ -7,6 +7,54 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <ImageView
+        android:id="@+id/fragment_launcher_applist_iv_backbutton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="13dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toStartOf="@+id/guideline4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/fragment_launcher_applist_gl_divider"
+        app:srcCompat="@drawable/arrow_left" />
+
+    <ImageView
+        android:id="@+id/fragment_launcher_applist_iv_searchbutton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="13dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toStartOf="@+id/guideline4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_launcher_applist_iv_backbutton"
+        app:srcCompat="@drawable/search" />
+
+    <ImageView
+        android:id="@+id/fragment_launcher_applist_iv_editbutton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="13dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toStartOf="@+id/guideline4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_launcher_applist_iv_searchbutton"
+        app:srcCompat="@drawable/edit" />
+
+    <ImageView
+        android:id="@+id/fragment_launcher_applist_iv_infobutton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="13dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toStartOf="@+id/fragment_launcher_applist_rv_recyclerview"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_launcher_applist_iv_editbutton"
+        app:srcCompat="@drawable/info" />
+
     <EditText
         android:id="@+id/fragment_launcher_applist_et_search"
         android:layout_width="0dp"
@@ -14,7 +62,10 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="8dp"
-        android:padding="5dp"
+        android:hint="@string/search_apps"
+        android:inputType="text"
+        android:textColor="@color/text"
+        android:textColorHint="#EEEEEE"
         app:layout_constraintBottom_toTopOf="@+id/fragment_launcher_applist_gl_divider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,11 +75,11 @@
         android:id="@+id/fragment_launcher_applist_tb_profile_toggle_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textOn="@string/work_profile"
         android:textOff="@string/private_profile"
+        android:textOn="@string/work_profile"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_launcher_applist_et_search" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/fragment_launcher_applist_gl_divider"
@@ -37,24 +88,21 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="60dp" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/fragment_launcher_applist_gl_divider2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="130dp" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fragment_launcher_applist_rv_recyclerview"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
         android:background="?android:attr/selectableItemBackground"
-        android:clickable="true"
         android:focusable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_launcher_applist_tb_profile_toggle_switch"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_launcher_applist_tb_profile_toggle_switch" />
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_launcher_applist_et_search" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.17" />
 </androidx.constraintlayout.widget.ConstraintLayout>

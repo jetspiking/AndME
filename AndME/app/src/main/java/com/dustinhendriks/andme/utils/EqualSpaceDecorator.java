@@ -7,14 +7,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration;
 
+/**
+ * Apply a margin as an ItemDecoration that is suitable for usage in a recycler view through the "addItemDecoration" function.
+ */
 public class EqualSpaceDecorator extends ItemDecoration {
-    private int margin;
+    private final int margin;
 
     public EqualSpaceDecorator(int margin) {
-        this.margin = margin;
-    }
-
-    public void setMargin(int margin) {
         this.margin = margin;
     }
 

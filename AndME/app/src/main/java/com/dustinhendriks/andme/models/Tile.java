@@ -2,11 +2,13 @@ package com.dustinhendriks.andme.models;
 
 import java.io.Serializable;
 
+/**
+ * Used for decorative purposes and represents a wrapped application in a "Tile", to display on the start menu.
+ */
 public abstract class Tile implements Serializable {
     private String name;
     private int width;
     private int height;
-    private int backgroundColor;
     private int iconResource;
     private int alertResource;
 
@@ -14,7 +16,6 @@ public abstract class Tile implements Serializable {
         name = builder.name;
         width = builder.width;
         height = builder.height;
-        backgroundColor = builder.backgroundColor;
         iconResource = builder.iconResource;
         alertResource = builder.alertResource;
     }
@@ -41,14 +42,6 @@ public abstract class Tile implements Serializable {
 
     public void setHeight(int height) {
         this.height = height;
-    }
-
-    public int getBackgroundColor() {
-        return backgroundColor;
-    }
-
-    public void setBackgroundColor(int backgroundColor) {
-        this.backgroundColor = backgroundColor;
     }
 
     public int getIconResource() {
@@ -111,17 +104,5 @@ public abstract class Tile implements Serializable {
             this.alertResource = alertResource;
             return getThis();
         }
-    }
-
-    @Override
-    public String toString() {
-        return "\nTile{" +
-                "name='" + name + '\'' +
-                ", width=" + width +
-                ", height=" + height +
-                ", backgroundColor=" + backgroundColor +
-                ", iconResource=" + iconResource +
-                ", alertResource=" + alertResource +
-                '}';
     }
 }
