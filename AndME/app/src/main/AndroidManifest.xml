@@ -17,7 +17,8 @@
             android:label="@string/title_activity_main"
             android:windowSoftInputMode="adjustPan"
             android:theme="@style/AppTheme.NoActionBar"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleTop">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

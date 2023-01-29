@@ -17,6 +17,7 @@ import com.dustinhendriks.andme.views.LauncherTilesHomeFragment;
  * - 3: Settings.
  */
 public class LauncherViewPageAdapter extends FragmentPagerAdapter {
+    public static int FORCE_RELOAD_NO_CACHE = 0;
     public static int NUMBER_OF_PAGES = 3;
     public static int PAGE_HOME = 0;
     public LauncherTilesHomeFragment launcherTilesHomeFragment;
@@ -47,6 +48,8 @@ public class LauncherViewPageAdapter extends FragmentPagerAdapter {
         }
         return null;
     }
+
+
 
     @Override
     public int getCount() {

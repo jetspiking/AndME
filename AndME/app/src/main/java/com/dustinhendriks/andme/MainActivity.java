@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         ViewPager viewPager = findViewById(R.id.fragment_launcher_content_vp_viewpager);
         LauncherViewPageAdapter adapter = new LauncherViewPageAdapter(getSupportFragmentManager(), FragmentPagerAdapter.POSITION_UNCHANGED);
         mViewPager = viewPager;
-        mViewPager.setOffscreenPageLimit(LauncherViewPageAdapter.NUMBER_OF_PAGES);
+        mViewPager.setOffscreenPageLimit(LauncherViewPageAdapter.FORCE_RELOAD_NO_CACHE);
         mPageAdapter = adapter;
         viewPager.setBackgroundColor(AppMiscDefaults.BACKGROUND_COLOR);
         viewPager.setAdapter(adapter);
@@ -56,12 +56,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void scrollToSettings() {
-        MAIN_ACTIVITY.mViewPager.setCurrentItem(LauncherViewPageAdapter.PAGE_HOME+2, true);
+        MAIN_ACTIVITY.mViewPager.setCurrentItem(LauncherViewPageAdapter.PAGE_HOME + 2, true);
     }
 
     public static void serializeData() {
-        if (MAIN_ACTIVITY.mPageAdapter.launcherApplistFragment != null)
-            MAIN_ACTIVITY.mPageAdapter.launcherTilesHomeFragment.mLauncherTilesFragment.storeData();
+        MAIN_ACTIVITY.mPageAdapter.launcherTilesHomeFragment.mLauncherTilesFragment.storeData();
     }
 
     public static void notifyDataSetTilesUpdate() {

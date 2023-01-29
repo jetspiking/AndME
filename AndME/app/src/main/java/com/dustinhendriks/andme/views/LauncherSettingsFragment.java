@@ -26,6 +26,17 @@ public class LauncherSettingsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mSettingsView = inflater.inflate(R.layout.fragment_launcher_settings, container, false);
+        loadSettings();
+        return mSettingsView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadSettings();
+    }
+
+    private void loadSettings() {
         mSettingsView.setBackgroundColor(Color.BLACK);
 
         View tileCountSettingsView = mSettingsView.findViewById(R.id.fragment_launcher_content_is_tilecount);
@@ -42,7 +53,6 @@ public class LauncherSettingsFragment extends Fragment {
         setViewTitleAndInput(tileCountSettingsView, getString(R.string.settings_tile_span), String.valueOf(AppMiscDefaults.TILE_SPAN_COUNT));
         setViewTitleAndInput(showAppTilesSettingsView, getString(R.string.settings_show_icons_app_list), String.valueOf(AppMiscDefaults.SHOW_ICONS_IN_APPS_LIST));
         setViewTitleAndInput(showNavigationBarSettingsView, getString(R.string.settings_show_navigation_bar), String.valueOf(AppMiscDefaults.SHOW_NAVIGATION_BAR));
-
 
         Button saveAndReload = mSettingsView.findViewById(R.id.fragment_launcher_content_bu_saveandreload);
         saveAndReload.setTextColor(Color.WHITE);
@@ -77,8 +87,6 @@ public class LauncherSettingsFragment extends Fragment {
                 MainActivity.scrollToHome();
             }
         });
-
-        return mSettingsView;
     }
 
     private int getColorFromHex(String hexValue) {
