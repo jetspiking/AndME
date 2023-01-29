@@ -30,12 +30,6 @@ public class LauncherSettingsFragment extends Fragment {
         return mSettingsView;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        loadSettings();
-    }
-
     private void loadSettings() {
         mSettingsView.setBackgroundColor(Color.BLACK);
 

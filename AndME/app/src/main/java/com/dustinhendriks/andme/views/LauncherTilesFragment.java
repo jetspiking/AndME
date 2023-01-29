@@ -55,13 +55,6 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
         return mLauncherView;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        initTiles(mLauncherView);
-        loadData();
-    }
-
     private void initTiles(View view) {
         mTileRecycler = view.findViewById(R.id.fragment_launcher_tiles_rv_appgrid);
         mTileAdapter = new LauncherTilesAdapter(getContext(), mTiles, this);

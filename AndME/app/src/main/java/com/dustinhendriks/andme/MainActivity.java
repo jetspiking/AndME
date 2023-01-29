@@ -6,11 +6,15 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.dustinhendriks.andme.adapters.LauncherViewPageAdapter;
+import com.dustinhendriks.andme.models.AppSerializableData;
 import com.dustinhendriks.andme.utils.AppMiscDefaults;
+import com.dustinhendriks.andme.utils.SerializationUtils;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+
+import java.util.Objects;
 
 /**
  * Contains the application data and acts as facade class by providing some handling methods.
@@ -24,14 +28,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        AppSerializableData appSerializableData = SerializationUtils.loadSerializedData(this);
+        if (appSerializableData != null)
+            AppMiscDefaults.RestoreFromSerializedData(appSerializableData);
         if (!AppMiscDefaults.SHOW_NAVIGATION_BAR)
             requestFullscreen();
         setContentView(R.layout.fragment_launcher_content_pager);
         ViewPager viewPager = findViewById(R.id.fragment_launcher_content_vp_viewpager);
         LauncherViewPageAdapter adapter = new LauncherViewPageAdapter(getSupportFragmentManager(), FragmentPagerAdapter.POSITION_UNCHANGED);
         mViewPager = viewPager;
-        mViewPager.setOffscreenPageLimit(LauncherViewPageAdapter.FORCE_RELOAD_NO_CACHE);
+        mViewPager.setOffscreenPageLimit(LauncherViewPageAdapter.NUMBER_OF_PAGES);
         mPageAdapter = adapter;
         viewPager.setBackgroundColor(AppMiscDefaults.BACKGROUND_COLOR);
         viewPager.setAdapter(adapter);
