@@ -14,7 +14,11 @@ import androidx.fragment.app.Fragment;
 
 import com.dustinhendriks.andme.MainActivity;
 import com.dustinhendriks.andme.R;
+import com.dustinhendriks.andme.models.AppSerializableData;
 import com.dustinhendriks.andme.utils.AppMiscDefaults;
+import com.dustinhendriks.andme.utils.SerializationUtils;
+
+import java.util.Objects;
 
 /**
  * Handles creating and displaying the application settings and handling actions.
@@ -32,6 +36,10 @@ public class LauncherSettingsFragment extends Fragment {
 
     private void loadSettings() {
         mSettingsView.setBackgroundColor(Color.BLACK);
+
+        AppSerializableData appSerializableData = SerializationUtils.loadSerializedData(Objects.requireNonNull(getContext()));
+        if (appSerializableData != null)
+            AppMiscDefaults.RestoreFromSerializedData(appSerializableData);
 
         View tileCountSettingsView = mSettingsView.findViewById(R.id.fragment_launcher_content_is_tilecount);
         View accentColorSettingsView = mSettingsView.findViewById(R.id.fragment_launcher_content_is_accentcolor);

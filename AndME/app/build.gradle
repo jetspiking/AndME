@@ -6,11 +6,11 @@ android {
         applicationId 'com.dustinhendriks.andme'
         minSdkVersion 14
         targetSdkVersion 33
-        versionCode 3
+        versionCode 4
 
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        versionName = "2.0.1"
+        versionName = "2.0.2"
     }
     buildTypes {
         release {
