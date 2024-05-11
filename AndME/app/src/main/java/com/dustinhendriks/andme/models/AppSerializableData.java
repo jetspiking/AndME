@@ -16,6 +16,7 @@ public class AppSerializableData implements Serializable {
     public int ACCENT_COLOR = NOT_UPDATED;
     public int TEXT_COLOR = NOT_UPDATED;
     public int SHOW_NAVIGATION_BAR = NOT_UPDATED;
+    public int SHOW_SYSTEM_WALLPAPER = NOT_UPDATED;
     public int SHOW_ICONS_IN_APPS_LIST = NOT_UPDATED;
 
     public void update(ArrayList<Tile> tiles) {
@@ -29,6 +30,7 @@ public class AppSerializableData implements Serializable {
         ACCENT_COLOR = AppMiscDefaults.ACCENT_COLOR;
         TEXT_COLOR = AppMiscDefaults.TEXT_COLOR;
         SHOW_NAVIGATION_BAR = AppMiscDefaults.SHOW_NAVIGATION_BAR ? 1 : 0;
+        SHOW_SYSTEM_WALLPAPER = AppMiscDefaults.SHOW_SYSTEM_WALLPAPER ? 1 : 0;
         SHOW_ICONS_IN_APPS_LIST = AppMiscDefaults.SHOW_ICONS_IN_APPS_LIST ? 1 : 0;
     }
 

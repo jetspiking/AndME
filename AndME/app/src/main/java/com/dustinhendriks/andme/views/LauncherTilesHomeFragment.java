@@ -21,19 +21,18 @@ import java.util.Objects;
  */
 public class LauncherTilesHomeFragment extends Fragment {
     private View view;
-    public LauncherTilesFragment mLauncherTilesFragment;
+    public LauncherTilesFragment mLauncherTilesFragment = new LauncherTilesFragment();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        MainActivity.MAIN_ACTIVITY.mPageAdapter.launcherTilesHomeFragment = this;
+
         View view = inflater.inflate(R.layout.fragment_launcher_tilehome, container, false);
         this.view = view;
 
-        if (savedInstanceState == null) {
-            mLauncherTilesFragment = new LauncherTilesFragment();
-            FragmentTransaction ft = Objects.requireNonNull(getFragmentManager()).beginTransaction();
-            ft.add(R.id.fragment_launcher_tilehome_fl_tiles, mLauncherTilesFragment).commit();
-        }
+        FragmentTransaction ft = Objects.requireNonNull(getFragmentManager()).beginTransaction();
+        ft.add(R.id.fragment_launcher_tilehome_fl_tiles, mLauncherTilesFragment).commit();
 
         ImageView navigationView = view.findViewById(R.id.fragment_launcher_tilehome_iv_arrowbutton);
         navigationView.setOnClickListener(new View.OnClickListener() {

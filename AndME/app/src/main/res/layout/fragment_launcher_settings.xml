@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#1F1F1F">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -12,62 +13,113 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="SpeakableTextPresentCheck">
+        android:padding="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:padding="8dp">
 
             <include
                 android:id="@+id/fragment_launcher_content_is_tilecount"
                 layout="@layout/item_launcher_inputsetting"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:background="#2E2E2E"
+                android:padding="12dp"
+                android:layout_marginBottom="8dp" />
 
             <include
                 android:id="@+id/fragment_launcher_content_is_accentcolor"
                 layout="@layout/item_launcher_inputsetting"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:background="#2E2E2E"
+                android:padding="12dp"
+                android:layout_marginBottom="8dp" />
 
             <include
                 android:id="@+id/fragment_launcher_content_is_backgroundcolor"
                 layout="@layout/item_launcher_inputsetting"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:background="#2E2E2E"
+                android:padding="12dp"
+                android:layout_marginBottom="8dp" />
 
             <include
                 android:id="@+id/fragment_launcher_content_is_textcolor"
                 layout="@layout/item_launcher_inputsetting"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:background="#2E2E2E"
+                android:padding="12dp"
+                android:layout_marginBottom="8dp" />
 
             <include
                 android:id="@+id/fragment_launcher_content_is_showapptiles"
                 layout="@layout/item_launcher_inputsetting"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:background="#2E2E2E"
+                android:padding="12dp"
+                android:layout_marginBottom="8dp" />
 
             <include
                 android:id="@+id/fragment_launcher_content_is_shownavigationbar"
                 layout="@layout/item_launcher_inputsetting"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:background="#2E2E2E"
+                android:padding="12dp"
+                android:layout_marginBottom="16dp" />
 
-            <Button
-                android:id="@+id/fragment_launcher_content_bu_saveandreload"
+            <include
+                android:id="@+id/fragment_launcher_content_is_showsystemwallpaper"
+                layout="@layout/item_launcher_inputsetting"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/save"
-                android:text="@string/save_settings" />
+                android:background="#2E2E2E"
+                android:padding="12dp"
+                android:layout_marginBottom="16dp" />
 
-            <Button
-                android:id="@+id/fragment_launcher_content_is_cancelandclose"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/close"
-                android:text="@string/cancel_settings" />
+                android:layout_height="match_parent"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="450dp">
+
+                <Button
+                    android:id="@+id/fragment_launcher_content_bu_saveandreload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="82dp"
+                    android:background="#D32F2F"
+                    android:drawableLeft="@drawable/save"
+                    android:text="@string/save_settings"
+                    android:backgroundTint="@android:color/transparent"
+                    android:textColor="#FFFFFF"
+                    android:layout_margin="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/fragment_launcher_content_is_cancelandclose"
+                    android:layout_width="wrap_content"
+                    android:layout_height="82dp"
+                    android:background="#D32F2F"
+                    android:drawableRight="@drawable/close"
+                    android:text="@string/cancel_settings"
+                    android:backgroundTint="@android:color/transparent"
+                    android:textColor="#FFFFFF"
+                    android:layout_margin="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

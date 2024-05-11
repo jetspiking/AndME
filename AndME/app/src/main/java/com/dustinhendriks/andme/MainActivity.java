@@ -1,6 +1,8 @@
 package com.dustinhendriks.andme;
 
 import android.appwidget.AppWidgetManager;
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -10,11 +12,10 @@ import com.dustinhendriks.andme.models.AppSerializableData;
 import com.dustinhendriks.andme.utils.AppMiscDefaults;
 import com.dustinhendriks.andme.utils.SerializationUtils;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-
-import java.util.Objects;
 
 /**
  * Contains the application data and acts as facade class by providing some handling methods.
@@ -22,7 +23,7 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     public static AppWidgetManager mAppWidgetManager;
-    private LauncherViewPageAdapter mPageAdapter;
+    public LauncherViewPageAdapter mPageAdapter;
     public static MainActivity MAIN_ACTIVITY;
 
     @Override
@@ -48,9 +49,20 @@ public class MainActivity extends AppCompatActivity {
         MAIN_ACTIVITY = this;
     }
 
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        reloadLauncher();
+    }
+
     public static void reloadLauncher() {
+        Intent intent = MAIN_ACTIVITY.getIntent();
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         MAIN_ACTIVITY.finish();
-        MAIN_ACTIVITY.startActivity(MAIN_ACTIVITY.getIntent());
+        MAIN_ACTIVITY.startActivity(intent);
+
+        //MAIN_ACTIVITY.finish();
+        //MAIN_ACTIVITY.startActivity(MAIN_ACTIVITY.getIntent());
     }
 
     public static void scrollToApps() {
@@ -74,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void notifyDataSetAppListUpdate() {
-        MAIN_ACTIVITY.mPageAdapter.launcherApplistFragment.notifyUpdatedUI();
+        MAIN_ACTIVITY.mPageAdapter.launcherAppListFragment.notifyUpdatedUI();
     }
 
     /**

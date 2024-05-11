@@ -11,18 +11,18 @@ import androidx.recyclerview.widget.RecyclerView.ItemDecoration;
  * Apply a margin as an ItemDecoration that is suitable for usage in a recycler view through the "addItemDecoration" function.
  */
 public class EqualSpaceDecorator extends ItemDecoration {
-    private final int margin;
+    private final int mMargin;
 
     public EqualSpaceDecorator(int margin) {
-        this.margin = margin;
+        this.mMargin = margin;
     }
 
     @Override
     public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-        outRect.left = this.margin;
-        outRect.right = this.margin;
-        outRect.bottom = this.margin;
-        outRect.top = this.margin;
+        outRect.left = this.mMargin;
+        outRect.right = this.mMargin;
+        outRect.bottom = this.mMargin;
+        outRect.top = this.mMargin;
     }
 
 }

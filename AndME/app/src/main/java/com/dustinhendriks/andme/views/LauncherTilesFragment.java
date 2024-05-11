@@ -1,15 +1,26 @@
 package com.dustinhendriks.andme.views;
 
+import android.Manifest;
+import android.app.WallpaperManager;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -18,6 +29,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dustinhendriks.andme.MainActivity;
 import com.dustinhendriks.andme.R;
 import com.dustinhendriks.andme.adapters.LauncherTilesAdapter;
+import com.dustinhendriks.andme.masks.MaskingBackgroundView;
 import com.dustinhendriks.andme.interfaces.LaunchableTile;
 import com.dustinhendriks.andme.interfaces.OnTileActionListener;
 import com.dustinhendriks.andme.models.AppSerializableData;
@@ -29,39 +41,52 @@ import com.dustinhendriks.andme.utils.SerializationUtils;
 import com.dustinhendriks.andme.utils.Utilities;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Handles creating and displaying the pinned applications and handling actions.
  */
 public class LauncherTilesFragment extends Fragment implements OnTileActionListener {
-    private RecyclerView mTileRecycler;
     public static ArrayList<Tile> mTiles = new ArrayList<>();
+    public LauncherTilesAdapter mTileAdapter;
+    private RecyclerView mTileRecycler;
     private LongPressDialogFragment mRemoveFromHomescreenDialog;
-    private LauncherTilesAdapter mTileAdapter;
     private GridLayoutManager mGridLayoutManager;
-    private EqualSpaceDecorator equalSpaceDecorator;
-    private AppSerializableData appSerializableData;
-    private int fromPos;
-    private int targetPos;
     private View mLauncherView;
+    private EqualSpaceDecorator mEqualSpaceDecorator;
+    private AppSerializableData mAppSerializableData;
+    private int mFromPos;
+    private int mTargetPos;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mTiles.clear();
         mLauncherView = inflater.inflate(R.layout.fragment_launcher_tiles, container, false);
-        initTiles(mLauncherView);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && AppMiscDefaults.SHOW_SYSTEM_WALLPAPER) {
+            WallpaperManager wallpaperManager = WallpaperManager.getInstance(getActivity());
+            ActivityCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.READ_EXTERNAL_STORAGE);
+            Drawable wallpaperDrawable = wallpaperManager.getDrawable();
+            this.mLauncherView.setBackground(wallpaperDrawable);
+        }
+
+        mTileRecycler = mLauncherView.findViewById(R.id.fragment_launcher_tiles_rv_appgrid);
         loadData();
+        initTiles();
         return mLauncherView;
     }
 
-    private void initTiles(View view) {
-        mTileRecycler = view.findViewById(R.id.fragment_launcher_tiles_rv_appgrid);
-        mTileAdapter = new LauncherTilesAdapter(getContext(), mTiles, this);
+    private void initTiles() {
+        int tileSpanCount = getTileSpanCount();
+
+        mTileAdapter = new LauncherTilesAdapter(getContext(), mTiles, this, tileSpanCount, AppMiscDefaults.SHOW_SYSTEM_WALLPAPER);
         mTileRecycler.setAdapter(mTileAdapter);
-        equalSpaceDecorator = new EqualSpaceDecorator(AppMiscDefaults.TILE_BORDER_MARGIN);
-        mTileRecycler.addItemDecoration(equalSpaceDecorator);
-        mGridLayoutManager = new GridLayoutManager(getContext(), AppMiscDefaults.TILE_SPAN_COUNT);
+        mEqualSpaceDecorator = new EqualSpaceDecorator(AppMiscDefaults.TILE_BORDER_MARGIN);
+        mTileRecycler.addItemDecoration(mEqualSpaceDecorator);
+        mGridLayoutManager = new GridLayoutManager(getContext(), tileSpanCount);
         mGridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
@@ -69,6 +94,34 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
             }
         });
         mTileRecycler.setLayoutManager(mGridLayoutManager);
+
+        if (AppMiscDefaults.SHOW_SYSTEM_WALLPAPER) {
+            ConstraintLayout parentLayout = (ConstraintLayout) mTileRecycler.getParent();
+
+            MaskingBackgroundView maskingView = new MaskingBackgroundView(getActivity(), AppMiscDefaults.BACKGROUND_COLOR);
+            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.MATCH_PARENT
+            );
+            maskingView.setLayoutParams(layoutParams);
+            maskingView.setBackgroundColor(Color.TRANSPARENT);
+
+            parentLayout.addView(maskingView, 0);
+
+            mTileRecycler.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    updateMaskingView(maskingView);
+                }
+            });
+            mTileRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    updateMaskingView(maskingView);
+                }
+            });
+        }
 
         ItemTouchHelper experimentalTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
             @Override
@@ -81,12 +134,12 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
                 if (mRemoveFromHomescreenDialog != null)
                     mRemoveFromHomescreenDialog.dismiss();
 
-                fromPos = viewHolder.getAdapterPosition();
-                targetPos = target.getAdapterPosition();
-                if ((fromPos != -1) && (targetPos != -1) && (fromPos != targetPos)) {
-                    Tile fromTile = mTiles.get(fromPos);
-                    mTiles.remove(fromPos);
-                    mTiles.add(targetPos, fromTile);
+                mFromPos = viewHolder.getAdapterPosition();
+                mTargetPos = target.getAdapterPosition();
+                if ((mFromPos != -1) && (mTargetPos != -1) && (mFromPos != mTargetPos)) {
+                    Tile fromTile = mTiles.get(mFromPos);
+                    mTiles.remove(mFromPos);
+                    mTiles.add(mTargetPos, fromTile);
                     mTileAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
                     MainActivity.serializeData();
                     return true;
@@ -138,44 +191,35 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
                 }
             });
 
-            int[] coords = new int[2];
-            ((LauncherTilesAdapter.ViewHolder) holder).itemView.getLocationInWindow(coords);
-            int position = coords[1];
-            position=0;
+            // int[] coords = new int[2];
+            // ((LauncherTilesAdapter.ViewHolder) holder).itemView.getLocationInWindow(coords);
+            // int position = coords[1];
+
+            int position = 0;
             mRemoveFromHomescreenDialog.show(position);
         }
     }
 
     public void storeData() {
-        // We need to copy the arraylist with tiles to prevent mutation issues when serializing in thread.
-        ArrayList<Tile> tiles = new ArrayList<Tile>(mTiles);
-
-        new Thread(() -> {
-
-            if (appSerializableData == null) {
-                appSerializableData = new AppSerializableData();
-            }
-            appSerializableData.update(tiles);
-            cacheAppIcons(tiles);
-            SerializationUtils.serializeData(Objects.requireNonNull(getActivity()), appSerializableData);
-
-        }).start();
-
+        // Copy the arraylist with tiles to prevent mutation issues when serializing in thread.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            CompletableFuture.runAsync(this::triggerSave);
+        else triggerSave();
     }
 
     public void notifyDataSetUpdate() {
-        mTileAdapter.notifyDataSetChanged();
+        if (mTileAdapter != null)
+            mTileAdapter.notifyDataSetChanged();
     }
 
     public void loadData() {
-        appSerializableData = SerializationUtils.loadSerializedData(Objects.requireNonNull(getActivity()));
-        if (appSerializableData != null) {
-            AppMiscDefaults.RestoreFromSerializedData(appSerializableData);
+        mAppSerializableData = SerializationUtils.loadSerializedData(Objects.requireNonNull(getActivity()));
+        if (mAppSerializableData != null) {
+            AppMiscDefaults.RestoreFromSerializedData(mAppSerializableData);
             mTiles.clear();
-            mTiles.addAll(appSerializableData.getTiles());
+            mTiles.addAll(mAppSerializableData.getTiles());
             loadAppIcons();
             MainActivity.notifyDataSetTilesUpdate();
-            MainActivity.notifyDataSetAppListUpdate();
         }
     }
 
@@ -192,5 +236,42 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
         for (Tile tile : tiles)
             if (tile instanceof AppTile)
                 ((AppTile) tile).getApp().cacheIcon(getActivity());
+    }
+
+    private int getTileSpanCount() {
+        DisplayMetrics metrics = Objects.requireNonNull(getActivity()).getResources().getDisplayMetrics();
+
+        int tileSpanCount;
+        float ratio;
+
+        if (metrics.heightPixels > metrics.widthPixels)
+            ratio = ((float) metrics.heightPixels / (float) metrics.widthPixels);
+        else ratio = ((float) metrics.widthPixels / (float) metrics.heightPixels);
+
+        int orientation = MainActivity.MAIN_ACTIVITY.getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            tileSpanCount = AppMiscDefaults.TILE_SPAN_COUNT;
+        } else {
+            tileSpanCount = (int) Math.ceil(AppMiscDefaults.TILE_SPAN_COUNT * ratio);
+        }
+        return tileSpanCount;
+    }
+
+    private void triggerSave() {
+        ArrayList<Tile> tiles = new ArrayList<Tile>(mTiles);
+        if (mAppSerializableData == null)
+            mAppSerializableData = new AppSerializableData();
+        mAppSerializableData.update(tiles);
+        cacheAppIcons(tiles);
+        SerializationUtils.serializeData(Objects.requireNonNull(getActivity()), mAppSerializableData);
+    }
+
+    private void updateMaskingView(MaskingBackgroundView maskingView) {
+        List<Rect> rects = new ArrayList<>();
+        for (int i = 0; i < mTileRecycler.getChildCount(); i++) {
+            View tile = mTileRecycler.getChildAt(i);
+            rects.add(new Rect(tile.getLeft(), tile.getTop(), tile.getRight(), tile.getBottom()));
+        }
+        maskingView.updateTileRects(rects);
     }
 }

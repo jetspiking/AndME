@@ -15,16 +15,18 @@ public class AppMiscDefaults {
     public static int OPACITY=0;
     public static boolean SHOW_ICONS_IN_APPS_LIST = true;
     public static boolean SHOW_NAVIGATION_BAR = true;
+    public static boolean SHOW_SYSTEM_WALLPAPER = true;
     public static int BACKGROUND_COLOR = Color.BLACK;
-    public static int ACCENT_COLOR = Color.parseColor("#BBBBBB");
+    public static int ACCENT_COLOR = Color.parseColor("#009688");
     public static int TEXT_COLOR = Color.WHITE;
 
     public static void RestoreFromSerializedData(AppSerializableData appSerializableData) {
         TEXT_COLOR = appSerializableData.TEXT_COLOR;
         ACCENT_COLOR = appSerializableData.ACCENT_COLOR;
         BACKGROUND_COLOR = appSerializableData.BACKGROUND_COLOR;
-        SHOW_NAVIGATION_BAR = appSerializableData.SHOW_NAVIGATION_BAR == 1;
         SHOW_ICONS_IN_APPS_LIST = appSerializableData.SHOW_ICONS_IN_APPS_LIST == 1;
+        SHOW_NAVIGATION_BAR = appSerializableData.SHOW_NAVIGATION_BAR == 1;
+        SHOW_SYSTEM_WALLPAPER = appSerializableData.SHOW_SYSTEM_WALLPAPER == 1;
         OPACITY = appSerializableData.OPACITY;
         TILE_LIST_MARGIN = appSerializableData.TILE_LIST_MARGIN;
         TILE_BORDER_MARGIN = appSerializableData.TILE_BORDER_MARGIN;

@@ -19,8 +19,9 @@ import com.dustinhendriks.andme.views.LauncherTilesHomeFragment;
 public class LauncherViewPageAdapter extends FragmentPagerAdapter {
     public static int NUMBER_OF_PAGES = 3;
     public static int PAGE_HOME = 0;
+
     public LauncherTilesHomeFragment launcherTilesHomeFragment;
-    public LauncherApplistFragment launcherApplistFragment;
+    public LauncherApplistFragment launcherAppListFragment;
     public LauncherSettingsFragment launcherSettingsFragment;
 
     public LauncherViewPageAdapter(@NonNull FragmentManager fm, int behavior) {
@@ -35,8 +36,8 @@ public class LauncherViewPageAdapter extends FragmentPagerAdapter {
                 launcherTilesHomeFragment = new LauncherTilesHomeFragment();
                 return launcherTilesHomeFragment;
             case 1:
-                launcherApplistFragment = new LauncherApplistFragment();
-                return launcherApplistFragment;
+                launcherAppListFragment = new LauncherApplistFragment();
+                return launcherAppListFragment;
             case 2:
                 launcherSettingsFragment = new LauncherSettingsFragment();
                 return launcherSettingsFragment;

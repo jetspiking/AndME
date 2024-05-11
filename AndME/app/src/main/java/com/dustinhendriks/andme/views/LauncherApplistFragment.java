@@ -160,7 +160,6 @@ public class LauncherApplistFragment extends Fragment implements OnItemClickedLi
     private void filter(String search) {
         mApps.clear();
         for (App app : mInstalledApps)
-            // Do not use trim. Java does not handle the removing of whitespaces correctly (in Android). Use the 'replace' function instead... ò_ó .
             if (app.getName().toString().toLowerCase().replace(" ", "").contains(search.toLowerCase().replace(" ", "")))
                 mApps.add(app);
         mLauncherApplistingAdapter.notifyDataSetChanged();

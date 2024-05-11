@@ -1,6 +1,7 @@
 package com.dustinhendriks.andme.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,11 +27,15 @@ public class LauncherTilesAdapter extends RecyclerView.Adapter<LauncherTilesAdap
     private ArrayList<Tile> mTiles;
     private Context mContext;
     private OnTileActionListener mOnItemClickedListener;
+    private int mTileCount;
+    private boolean mIsTransparent;
 
-    public LauncherTilesAdapter(Context context, ArrayList<Tile> tiles, OnTileActionListener onTileActionListener) {
+    public LauncherTilesAdapter(Context context, ArrayList<Tile> tiles, OnTileActionListener onTileActionListener, int spanCount, boolean isTransparent) {
         this.mTiles = tiles;
         this.mContext = context;
         this.mOnItemClickedListener = onTileActionListener;
+        this.mTileCount = spanCount;
+        this.mIsTransparent = isTransparent;
     }
 
     @NonNull
@@ -38,7 +43,7 @@ public class LauncherTilesAdapter extends RecyclerView.Adapter<LauncherTilesAdap
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_launcher_tile, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
-        view.getLayoutParams().height = (parent.getWidth() / AppMiscDefaults.TILE_SPAN_COUNT) - (AppMiscDefaults.TILE_BORDER_MARGIN * 2);
+        view.getLayoutParams().height = (parent.getWidth() / mTileCount) - (AppMiscDefaults.TILE_BORDER_MARGIN * 2);
         return viewHolder;
     }
 
@@ -47,13 +52,18 @@ public class LauncherTilesAdapter extends RecyclerView.Adapter<LauncherTilesAdap
         Tile selectedTile = mTiles.get(position);
         holder.mName.setText(selectedTile.getName());
         holder.mName.setTextColor(AppMiscDefaults.TEXT_COLOR);
-        holder.mBackground.setBackgroundColor(AppMiscDefaults.ACCENT_COLOR);
+
+        if (this.mIsTransparent)
+            holder.mBackground.setBackgroundColor(Color.TRANSPARENT);
+        else
+            holder.mBackground.setBackgroundColor(AppMiscDefaults.ACCENT_COLOR);
+
         if ((selectedTile instanceof AppTile)) {
-            if (((AppTile)selectedTile).getApp().getAppIcon()!=null)
-                holder.mAppIcon.setImageDrawable(((AppTile)selectedTile).getApp().getAppIcon());
+            if (((AppTile) selectedTile).getApp().getAppIcon() != null)
+                holder.mAppIcon.setImageDrawable(((AppTile) selectedTile).getApp().getAppIcon());
         } else
             holder.mAppIcon.setImageResource(selectedTile.getIconResource());
-        holder.mBackground.setAlpha(1.f-(AppMiscDefaults.OPACITY/100.f));
+        holder.mBackground.setAlpha(1.f - (AppMiscDefaults.OPACITY / 100.f));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

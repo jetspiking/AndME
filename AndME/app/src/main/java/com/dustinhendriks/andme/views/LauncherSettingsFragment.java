@@ -47,6 +47,7 @@ public class LauncherSettingsFragment extends Fragment {
         View textColorSettingsView = mSettingsView.findViewById(R.id.fragment_launcher_content_is_textcolor);
         View showAppTilesSettingsView = mSettingsView.findViewById(R.id.fragment_launcher_content_is_showapptiles);
         View showNavigationBarSettingsView = mSettingsView.findViewById(R.id.fragment_launcher_content_is_shownavigationbar);
+        View showSystemWallpaperSettingsView = mSettingsView.findViewById(R.id.fragment_launcher_content_is_showsystemwallpaper);
 
         setViewTitleAndInput(accentColorSettingsView, getString(R.string.settings_accent_color), Integer.toHexString(AppMiscDefaults.ACCENT_COLOR));
         setViewTitleAndInput(backgroundColorSettingsView, getString(R.string.settings_background_color), Integer.toHexString(AppMiscDefaults.BACKGROUND_COLOR));
@@ -55,10 +56,10 @@ public class LauncherSettingsFragment extends Fragment {
         setViewTitleAndInput(tileCountSettingsView, getString(R.string.settings_tile_span), String.valueOf(AppMiscDefaults.TILE_SPAN_COUNT));
         setViewTitleAndInput(showAppTilesSettingsView, getString(R.string.settings_show_icons_app_list), String.valueOf(AppMiscDefaults.SHOW_ICONS_IN_APPS_LIST));
         setViewTitleAndInput(showNavigationBarSettingsView, getString(R.string.settings_show_navigation_bar), String.valueOf(AppMiscDefaults.SHOW_NAVIGATION_BAR));
+        setViewTitleAndInput(showSystemWallpaperSettingsView, getString(R.string.settings_show_system_wallpaper), String.valueOf(AppMiscDefaults.SHOW_SYSTEM_WALLPAPER));
 
         Button saveAndReload = mSettingsView.findViewById(R.id.fragment_launcher_content_bu_saveandreload);
         saveAndReload.setTextColor(Color.WHITE);
-        saveAndReload.setBackgroundColor(Color.GRAY);
         saveAndReload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,6 +73,7 @@ public class LauncherSettingsFragment extends Fragment {
                         AppMiscDefaults.TEXT_COLOR = getColorFromHex(getViewInput(textColorSettingsView));
                         AppMiscDefaults.SHOW_ICONS_IN_APPS_LIST = Boolean.parseBoolean(getViewInput(showAppTilesSettingsView));
                         AppMiscDefaults.SHOW_NAVIGATION_BAR = Boolean.parseBoolean(getViewInput(showNavigationBarSettingsView));
+                        AppMiscDefaults.SHOW_SYSTEM_WALLPAPER = Boolean.parseBoolean(getViewInput(showSystemWallpaperSettingsView));
                         MainActivity.serializeData();
                         MainActivity.reloadLauncher();
                     }
@@ -82,7 +84,6 @@ public class LauncherSettingsFragment extends Fragment {
 
         Button cancelAndClose = mSettingsView.findViewById(R.id.fragment_launcher_content_is_cancelandclose);
         cancelAndClose.setTextColor(Color.WHITE);
-        cancelAndClose.setBackgroundColor(Color.DKGRAY);
         cancelAndClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

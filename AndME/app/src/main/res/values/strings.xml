@@ -7,12 +7,13 @@
     <string name="navigate_to_github">Navigate to GitHub</string>
     <string name="unpin_from_start">Unpin from start</string>
     <string name="search_apps">Search apps</string>
-    <string name="save_settings">Save settings and reload</string>
-    <string name="cancel_settings">Cancel and return</string>
+    <string name="save_settings">Save</string>
+    <string name="cancel_settings">Cancel</string>
     <string name="application_storage_tag">data</string>
     <string name="settings_show_navigation_bar">Show navigation bar</string>
+    <string name="settings_show_system_wallpaper">Show system wallpaper</string>
     <string name="settings_show_icons_app_list">Show icons in app list</string>
-    <string name="settings_tile_span">Tile span</string>
+    <string name="settings_tile_span">Portrait tile span</string>
     <string name="settings_text_color">Text color</string>
     <string name="settings_background_color">Background color</string>
     <string name="settings_accent_color">Accent color</string>
