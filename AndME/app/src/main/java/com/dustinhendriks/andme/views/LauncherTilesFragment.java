@@ -67,12 +67,14 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
         mLauncherView = inflater.inflate(R.layout.fragment_launcher_tiles, container, false);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && AppMiscDefaults.SHOW_SYSTEM_WALLPAPER) {
-            WallpaperManager wallpaperManager = WallpaperManager.getInstance(getActivity());
-            ActivityCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.READ_EXTERNAL_STORAGE);
-            Drawable wallpaperDrawable = wallpaperManager.getDrawable();
-            if (wallpaperDrawable != null)
-                this.mLauncherView.setBackground(wallpaperDrawable);
-            else AppMiscDefaults.SHOW_SYSTEM_WALLPAPER = false;
+            try {
+                WallpaperManager wallpaperManager = WallpaperManager.getInstance(getActivity());
+                ActivityCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.READ_EXTERNAL_STORAGE);
+                Drawable wallpaperDrawable = wallpaperManager.getDrawable();
+                if (wallpaperDrawable != null)
+                    this.mLauncherView.setBackground(wallpaperDrawable);
+                else AppMiscDefaults.SHOW_SYSTEM_WALLPAPER = false;
+            } catch(Exception e) { AppMiscDefaults.SHOW_SYSTEM_WALLPAPER = false; }
         }
 
         mTileRecycler = mLauncherView.findViewById(R.id.fragment_launcher_tiles_rv_appgrid);
