@@ -1,6 +1,6 @@
 # <img src="https://raw.githubusercontent.com/jetspiking/AndME/main/Images/icon.png" width="64" height="64"> Android Minimal Edition Launcher 
 
-<img src="https://raw.githubusercontent.com/jetspiking/AndME/main/Images/HomePage.png" width="166" height="360"> <img src="https://raw.githubusercontent.com/jetspiking/AndME/main/Images/HomePageScrolling.png" width="166" height="360"> <img src="https://raw.githubusercontent.com/jetspiking/AndME/main/Images/AppsPage.jpg" width="166" height="360"> <img src="https://raw.githubusercontent.com/jetspiking/AndME/main/Images/FilterPage.jpg" width="166" height="360">
+<img src="https://raw.githubusercontent.com/jetspiking/AndME/main/Images/HomePage.png" width="200" height="360"> <img src="https://raw.githubusercontent.com/jetspiking/AndME/main/Images/HomePageScrolling.png" width="200" height="360"> <img src="https://raw.githubusercontent.com/jetspiking/AndME/main/Images/AppsPage.jpg" width="166" height="360"> <img src="https://raw.githubusercontent.com/jetspiking/AndME/main/Images/FilterPage.jpg" width="166" height="360">
 
 # Description
 AndME launcher is an extremely minimalistic launcher for Android, inspired by the Windows Phone 7.5 operating system. This launcher supports enterprise apps, or the work profile, by providing a button to switch between the apps profile in the list of applications.
