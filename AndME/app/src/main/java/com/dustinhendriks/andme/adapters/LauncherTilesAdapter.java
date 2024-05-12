@@ -1,7 +1,9 @@
 package com.dustinhendriks.andme.adapters;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import com.dustinhendriks.andme.interfaces.OnTileActionListener;
 import com.dustinhendriks.andme.models.AppTile;
 import com.dustinhendriks.andme.models.Tile;
 import com.dustinhendriks.andme.utils.AppMiscDefaults;
+import com.dustinhendriks.andme.utils.IconPackUtils;
 
 import java.util.ArrayList;
 
@@ -61,6 +64,8 @@ public class LauncherTilesAdapter extends RecyclerView.Adapter<LauncherTilesAdap
         if ((selectedTile instanceof AppTile)) {
             if (((AppTile) selectedTile).getApp().getAppIcon() != null)
                 holder.mAppIcon.setImageDrawable(((AppTile) selectedTile).getApp().getAppIcon());
+            Drawable customIcon = IconPackUtils.loadIconFromPack(mContext, ((AppTile) selectedTile).getApp().getAppPackage().toString(), AppMiscDefaults.APPLIED_ICON_PACK_NAME);
+            if (customIcon != null) holder.mAppIcon.setImageDrawable(customIcon);
         } else
             holder.mAppIcon.setImageResource(selectedTile.getIconResource());
         holder.mBackground.setAlpha(1.f - (AppMiscDefaults.OPACITY / 100.f));

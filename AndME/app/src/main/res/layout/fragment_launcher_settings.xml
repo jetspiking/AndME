@@ -84,6 +84,21 @@
                 android:padding="12dp"
                 android:layout_marginBottom="16dp" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_select_icon_pack"
+                android:textSize="18sp"
+                android:layout_marginBottom="8dp"
+                android:textColor="#FFF"/>
+
+            <Spinner
+                android:id="@+id/fragment_launcher_content_sp_iconpack"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dropdown"
+                android:background="#FFF"/>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

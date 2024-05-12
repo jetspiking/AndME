@@ -16,6 +16,7 @@ public class AppMiscDefaults {
     public static boolean SHOW_ICONS_IN_APPS_LIST = true;
     public static boolean SHOW_NAVIGATION_BAR = true;
     public static boolean SHOW_SYSTEM_WALLPAPER = false;
+    public static String APPLIED_ICON_PACK_NAME = "default";
     public static int BACKGROUND_COLOR = Color.BLACK;
     public static int ACCENT_COLOR = Color.parseColor("#009688");
     public static int TEXT_COLOR = Color.WHITE;
@@ -31,5 +32,6 @@ public class AppMiscDefaults {
         TILE_LIST_MARGIN = appSerializableData.TILE_LIST_MARGIN;
         TILE_BORDER_MARGIN = appSerializableData.TILE_BORDER_MARGIN;
         TILE_SPAN_COUNT = appSerializableData.TILE_SPAN_COUNT;
+        APPLIED_ICON_PACK_NAME = appSerializableData.APPLIED_ICON_PACK_NAME;
     }
 }

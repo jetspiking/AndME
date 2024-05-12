@@ -1,11 +1,16 @@
 package com.dustinhendriks.andme.views;
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,9 +21,13 @@ import com.dustinhendriks.andme.MainActivity;
 import com.dustinhendriks.andme.R;
 import com.dustinhendriks.andme.models.AppSerializableData;
 import com.dustinhendriks.andme.utils.AppMiscDefaults;
+import com.dustinhendriks.andme.utils.IconPackUtils;
 import com.dustinhendriks.andme.utils.SerializationUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  * Handles creating and displaying the application settings and handling actions.
@@ -48,6 +57,7 @@ public class LauncherSettingsFragment extends Fragment {
         View showAppTilesSettingsView = mSettingsView.findViewById(R.id.fragment_launcher_content_is_showapptiles);
         View showNavigationBarSettingsView = mSettingsView.findViewById(R.id.fragment_launcher_content_is_shownavigationbar);
         View showSystemWallpaperSettingsView = mSettingsView.findViewById(R.id.fragment_launcher_content_is_showsystemwallpaper);
+        Spinner iconPackSpinner = mSettingsView.findViewById(R.id.fragment_launcher_content_sp_iconpack);
 
         setViewTitleAndInput(accentColorSettingsView, getString(R.string.settings_accent_color), Integer.toHexString(AppMiscDefaults.ACCENT_COLOR));
         setViewTitleAndInput(backgroundColorSettingsView, getString(R.string.settings_background_color), Integer.toHexString(AppMiscDefaults.BACKGROUND_COLOR));
@@ -57,6 +67,17 @@ public class LauncherSettingsFragment extends Fragment {
         setViewTitleAndInput(showAppTilesSettingsView, getString(R.string.settings_show_icons_app_list), String.valueOf(AppMiscDefaults.SHOW_ICONS_IN_APPS_LIST));
         setViewTitleAndInput(showNavigationBarSettingsView, getString(R.string.settings_show_navigation_bar), String.valueOf(AppMiscDefaults.SHOW_NAVIGATION_BAR));
         setViewTitleAndInput(showSystemWallpaperSettingsView, getString(R.string.settings_show_system_wallpaper), String.valueOf(AppMiscDefaults.SHOW_SYSTEM_WALLPAPER));
+
+        List<String> iconPacks = IconPackUtils.getAvailableIconPacks();
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, iconPacks);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        iconPackSpinner.setAdapter(adapter);
+
+        for(int i = 0; i < iconPacks.size(); i++)
+            if (AppMiscDefaults.APPLIED_ICON_PACK_NAME.equals(iconPacks.get(i))) {
+                iconPackSpinner.setSelection(i);
+                break;
+            }
 
         Button saveAndReload = mSettingsView.findViewById(R.id.fragment_launcher_content_bu_saveandreload);
         saveAndReload.setTextColor(Color.WHITE);
@@ -74,6 +95,7 @@ public class LauncherSettingsFragment extends Fragment {
                         AppMiscDefaults.SHOW_ICONS_IN_APPS_LIST = Boolean.parseBoolean(getViewInput(showAppTilesSettingsView));
                         AppMiscDefaults.SHOW_NAVIGATION_BAR = Boolean.parseBoolean(getViewInput(showNavigationBarSettingsView));
                         AppMiscDefaults.SHOW_SYSTEM_WALLPAPER = Boolean.parseBoolean(getViewInput(showSystemWallpaperSettingsView));
+                        AppMiscDefaults.APPLIED_ICON_PACK_NAME = iconPackSpinner.getSelectedItem().toString();
                         MainActivity.serializeData();
                         MainActivity.reloadLauncher();
                     }

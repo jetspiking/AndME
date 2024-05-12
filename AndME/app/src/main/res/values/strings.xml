@@ -13,6 +13,7 @@
     <string name="settings_show_navigation_bar">Show navigation bar</string>
     <string name="settings_show_system_wallpaper">Show system wallpaper</string>
     <string name="settings_show_icons_app_list">Show icons in app list</string>
+    <string name="settings_select_icon_pack">Select icon pack</string>
     <string name="settings_tile_span">Portrait tile span</string>
     <string name="settings_text_color">Text color</string>
     <string name="settings_background_color">Background color</string>

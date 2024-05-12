@@ -18,6 +18,7 @@ public class AppSerializableData implements Serializable {
     public int SHOW_NAVIGATION_BAR = NOT_UPDATED;
     public int SHOW_SYSTEM_WALLPAPER = NOT_UPDATED;
     public int SHOW_ICONS_IN_APPS_LIST = NOT_UPDATED;
+    public String APPLIED_ICON_PACK_NAME = "";
 
     public void update(ArrayList<Tile> tiles) {
         this.tiles.clear();
@@ -32,6 +33,7 @@ public class AppSerializableData implements Serializable {
         SHOW_NAVIGATION_BAR = AppMiscDefaults.SHOW_NAVIGATION_BAR ? 1 : 0;
         SHOW_SYSTEM_WALLPAPER = AppMiscDefaults.SHOW_SYSTEM_WALLPAPER ? 1 : 0;
         SHOW_ICONS_IN_APPS_LIST = AppMiscDefaults.SHOW_ICONS_IN_APPS_LIST ? 1 : 0;
+        APPLIED_ICON_PACK_NAME = AppMiscDefaults.APPLIED_ICON_PACK_NAME;
     }
 
     public ArrayList<Tile> getTiles() {
