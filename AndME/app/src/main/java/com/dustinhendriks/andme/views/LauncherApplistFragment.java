@@ -182,12 +182,7 @@ public class LauncherApplistFragment extends Fragment implements OnItemClickedLi
         }
 
         mApps.addAll(mInstalledApps);
-        Collections.sort(mApps, new Comparator<App>() {
-            @Override
-            public int compare(App o1, App o2) {
-                return o1.getName().toString().compareTo(o2.getName().toString());
-            }
-        });
+        Collections.sort(mApps, (o1, o2) -> o1.getName().toString().compareTo(o2.getName().toString()));
 
         mLauncherApplistingAdapter.notifyDataSetChanged();
     }
