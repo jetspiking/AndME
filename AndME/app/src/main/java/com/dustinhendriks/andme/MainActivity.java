@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AppSerializableData appSerializableData = SerializationUtils.loadSerializedData(this);
+        AppSerializableData appSerializableData = SerializationUtils.DeserializedData(this);
         if (appSerializableData != null)
             AppMiscDefaults.RestoreFromSerializedData(appSerializableData);
         if (!AppMiscDefaults.SHOW_NAVIGATION_BAR)

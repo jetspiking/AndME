@@ -14,7 +14,6 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -52,27 +51,27 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
     public static ArrayList<Tile> mTiles = new ArrayList<>();
     public LauncherTilesAdapter mTileAdapter;
     private RecyclerView mTileRecycler;
-    private LongPressDialogFragment mRemoveFromHomescreenDialog;
-    private GridLayoutManager mGridLayoutManager;
-    private View mLauncherView;
-    private EqualSpaceDecorator mEqualSpaceDecorator;
+    private LongPressDialogFragment mRemoveFromHomeScreenDialog;
     private AppSerializableData mAppSerializableData;
     private int mFromPos;
     private int mTargetPos;
 
+    /**
+     * Overridden onCreateView method called when creating the view.
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mTiles.clear();
-        mLauncherView = inflater.inflate(R.layout.fragment_launcher_tiles, container, false);
+        View mLauncherView = inflater.inflate(R.layout.fragment_launcher_tiles, container, false);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && AppMiscDefaults.SHOW_SYSTEM_WALLPAPER) {
+        if (AppMiscDefaults.SHOW_SYSTEM_WALLPAPER) {
             try {
                 WallpaperManager wallpaperManager = WallpaperManager.getInstance(getActivity());
                 ActivityCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.READ_EXTERNAL_STORAGE);
                 Drawable wallpaperDrawable = wallpaperManager.getDrawable();
                 if (wallpaperDrawable != null)
-                    this.mLauncherView.setBackground(wallpaperDrawable);
+                    mLauncherView.setBackground(wallpaperDrawable);
                 else AppMiscDefaults.SHOW_SYSTEM_WALLPAPER = false;
             } catch(Exception e) { AppMiscDefaults.SHOW_SYSTEM_WALLPAPER = false; }
         }
@@ -83,14 +82,17 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
         return mLauncherView;
     }
 
+    /**
+     * Initialize the tiles to be displayed and relevant events to be handled.
+     */
     private void initTiles() {
         int tileSpanCount = getTileSpanCount();
 
         mTileAdapter = new LauncherTilesAdapter(getContext(), mTiles, this, tileSpanCount, AppMiscDefaults.SHOW_SYSTEM_WALLPAPER);
         mTileRecycler.setAdapter(mTileAdapter);
-        mEqualSpaceDecorator = new EqualSpaceDecorator(AppMiscDefaults.TILE_BORDER_MARGIN);
+        EqualSpaceDecorator mEqualSpaceDecorator = new EqualSpaceDecorator(AppMiscDefaults.TILE_BORDER_MARGIN);
         mTileRecycler.addItemDecoration(mEqualSpaceDecorator);
-        mGridLayoutManager = new GridLayoutManager(getContext(), tileSpanCount);
+        GridLayoutManager mGridLayoutManager = new GridLayoutManager(getContext(), tileSpanCount);
         mGridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
@@ -112,12 +114,7 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
 
             parentLayout.addView(maskingView, 0);
 
-            mTileRecycler.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    updateMaskingView(maskingView);
-                }
-            });
+            mTileRecycler.getViewTreeObserver().addOnGlobalLayoutListener(() -> updateMaskingView(maskingView));
             mTileRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -135,8 +132,8 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
 
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                if (mRemoveFromHomescreenDialog != null)
-                    mRemoveFromHomescreenDialog.dismiss();
+                if (mRemoveFromHomeScreenDialog != null)
+                    mRemoveFromHomeScreenDialog.dismiss();
 
                 mFromPos = viewHolder.getAdapterPosition();
                 mTargetPos = target.getAdapterPosition();
@@ -171,6 +168,9 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
         experimentalTouchHelper.attachToRecyclerView(mTileRecycler);
     }
 
+    /**
+     * When a tile is clicked the relevant application should be launched.
+     */
     @Override
     public void clickedItem(Context context, Object object, Object holder) {
         if (object instanceof LaunchableTile<?>) {
@@ -182,42 +182,46 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
         }
     }
 
+    /**
+     * When a tile is long clicked a prompt should appear to remove it.
+     */
     @Override
     public void longClickedItem(Context context, Object object, Object holder) {
         if (object instanceof Tile) {
-            mRemoveFromHomescreenDialog = new LongPressDialogFragment(context, getString(R.string.unpin_from_start));
-            mRemoveFromHomescreenDialog.subscribeOption1(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mTiles.remove(object);
-                    mTileAdapter.notifyDataSetChanged();
-                    MainActivity.serializeData();
-                }
+            mRemoveFromHomeScreenDialog = new LongPressDialogFragment(context, getString(R.string.unpin_from_start));
+            mRemoveFromHomeScreenDialog.subscribeOption1(v -> {
+                int index = mTiles.indexOf(object);
+                mTiles.remove(object);
+                mTileAdapter.notifyItemRemoved(index);
+                MainActivity.serializeData();
             });
 
-            // int[] coords = new int[2];
-            // ((LauncherTilesAdapter.ViewHolder) holder).itemView.getLocationInWindow(coords);
-            // int position = coords[1];
-
-            int position = 0;
-            mRemoveFromHomescreenDialog.show(position);
+            mRemoveFromHomeScreenDialog.show(0);
         }
     }
 
+    /**
+     * Store the application data.
+     */
     public void storeData() {
-        // Copy the arraylist with tiles to prevent mutation issues when serializing in thread.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
             CompletableFuture.runAsync(this::triggerSave);
         else triggerSave();
     }
 
+    /**
+     * Force update the tile adapter.
+     */
     public void notifyDataSetUpdate() {
         if (mTileAdapter != null)
             mTileAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Load the application data and reset all tiles.
+     */
     public void loadData() {
-        mAppSerializableData = SerializationUtils.loadSerializedData(Objects.requireNonNull(getActivity()));
+        mAppSerializableData = SerializationUtils.DeserializedData(Objects.requireNonNull(getActivity()));
         if (mAppSerializableData != null) {
             AppMiscDefaults.RestoreFromSerializedData(mAppSerializableData);
             mTiles.clear();
@@ -227,6 +231,9 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
         }
     }
 
+    /**
+     * Load the application icons.
+     */
     private void loadAppIcons() {
         for (Tile tile : mTiles)
             if (tile instanceof AppTile) {
@@ -236,12 +243,20 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
             }
     }
 
+    /**
+     * Cache the application icons.
+     * @param tiles Tiles containing the icons to cache.
+     */
     private void cacheAppIcons(ArrayList<Tile> tiles) {
         for (Tile tile : tiles)
             if (tile instanceof AppTile)
                 ((AppTile) tile).getApp().cacheIcon(getActivity());
     }
 
+    /**
+     * Get the span count of tiles dependant on orientation and aspect ratio.
+     * @return Span count dependant on orientation and aspect ratio.
+     */
     private int getTileSpanCount() {
         DisplayMetrics metrics = Objects.requireNonNull(getActivity()).getResources().getDisplayMetrics();
 
@@ -261,7 +276,11 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
         return tileSpanCount;
     }
 
+    /**
+     * Save all tiles.
+     */
     private void triggerSave() {
+        // Copy the arraylist with tiles to prevent mutation issues when collection is being modified concurrently.
         ArrayList<Tile> tiles = new ArrayList<Tile>(mTiles);
         if (mAppSerializableData == null)
             mAppSerializableData = new AppSerializableData();
@@ -270,12 +289,16 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
         SerializationUtils.serializeData(Objects.requireNonNull(getActivity()), mAppSerializableData);
     }
 
+    /**
+     * Update the masking background view (wallpaper).
+     * @param maskingView maskingView to update.
+     */
     private void updateMaskingView(MaskingBackgroundView maskingView) {
-        List<Rect> rects = new ArrayList<>();
+        List<Rect> maskingItems = new ArrayList<>();
         for (int i = 0; i < mTileRecycler.getChildCount(); i++) {
             View tile = mTileRecycler.getChildAt(i);
-            rects.add(new Rect(tile.getLeft(), tile.getTop(), tile.getRight(), tile.getBottom()));
+            maskingItems.add(new Rect(tile.getLeft(), tile.getTop(), tile.getRight(), tile.getBottom()));
         }
-        maskingView.updateTileRects(rects);
+        maskingView.updateTileRects(maskingItems);
     }
 }

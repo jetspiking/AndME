@@ -13,10 +13,17 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles mapping of application packages to icons.
+ */
 public class IconPackUtils {
     public static final String ICON_PACK_DEFAULT = "Default";
     public static final String ICON_PACK_OPENMIX = "Openmix";
 
+    /**
+     * Retrieve the list of available icon packs.
+     * @return List of icon packs.
+     */
     public static List<String> getAvailableIconPacks() {
         List<String> iconPacks = new ArrayList<>();
         iconPacks.add(ICON_PACK_DEFAULT);
@@ -24,6 +31,13 @@ public class IconPackUtils {
         return iconPacks;
     }
 
+    /**
+     * Load an icon based on package name.
+     * @param context Application context.
+     * @param appPackageName Application package name.
+     * @param iconPackPackageName Icon pack name.
+     * @return Drawable representation of icon.
+     */
     public static Drawable loadIconFromPack(Context context, String appPackageName, String iconPackPackageName) {
         String iconName = getDiskIconName(context, appPackageName, iconPackPackageName);
         if (iconName != null) {
@@ -32,6 +46,13 @@ public class IconPackUtils {
         return null;
     }
 
+    /**
+     * Retrieve the icon name from the disk for a specific app package name (mapped).
+     * @param context Application context.
+     * @param appPackageName Application to retrieve icon name for.
+     * @param iconPackPackageName Icon pack name.
+     * @return String containing icon name.
+     */
     private static String getDiskIconName(Context context, String appPackageName, String iconPackPackageName) {
         try {
             String path = "iconpacks/" + iconPackPackageName.toLowerCase();
@@ -47,6 +68,13 @@ public class IconPackUtils {
         return null;
     }
 
+    /**
+     * Retrieve an icon pack image by name.
+     * @param context Application context.
+     * @param iconName Icon name.
+     * @param iconPackPackageName Application pack name.
+     * @return Drawable representation of icon.
+     */
     public static Drawable getDiskIconByName(Context context, String iconName, String iconPackPackageName) {
         try {
             InputStream inputStream = context.getAssets().open("iconpacks/" + iconPackPackageName.toLowerCase() + "/" + iconName);

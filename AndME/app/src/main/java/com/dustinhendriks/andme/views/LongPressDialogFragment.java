@@ -22,10 +22,15 @@ public class LongPressDialogFragment {
     private AlertDialog mDialog;
     private TextView mText;
 
+    /**
+     * Create a dialog.
+     * @param context Application context.
+     * @param text String to display.
+     */
     public LongPressDialogFragment(Context context, String text) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context, R.style.DialogTheme);
         mView = View.inflate(context, R.layout.item_dialog_longpress, null);
-        mText = (TextView) mView.findViewById(R.id.item_dialog_longpress_tv_opt1);
+        mText = mView.findViewById(R.id.item_dialog_longpress_tv_opt1);
         mText.setTextColor(AppMiscDefaults.ACCENT_COLOR);
         mView.setBackgroundColor(AppMiscDefaults.TEXT_COLOR);
         setDialogOptionText(text);
@@ -40,37 +45,47 @@ public class LongPressDialogFragment {
     public void show(int y) {
         mDialog.show();
         Window window = mDialog.getWindow();
+        assert window != null;
         window.setGravity(Gravity.TOP);
         WindowManager.LayoutParams layoutParams = window.getAttributes();
         layoutParams.y = y;
         window.setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
     }
 
+    /**
+     * Close the dialog.
+     */
     public void dismiss() {
         mDialog.dismiss();
     }
 
+    /**
+     * Set the dialog text.
+     * @param text String to display.
+     */
     public void setDialogOptionText(String text) {
         mText.setText(text);
     }
 
+    /**
+     * Set listener for on click event.
+     * @param onClickListener Listener.
+     */
     public void subscribeOption1(View.OnClickListener onClickListener) {
-        mText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickListener.onClick(v);
-                mDialog.dismiss();
-            }
+        mText.setOnClickListener(v -> {
+            onClickListener.onClick(v);
+            mDialog.dismiss();
         });
     }
 
+    /**
+     * Set listener for cancel event.
+     * @param onCancelListener Listener.
+     */
     public void subscribeCancelListener(DialogInterface.OnCancelListener onCancelListener) {
-        mDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                onCancelListener.onCancel(dialog);
-                dialog.cancel();
-            }
+        mDialog.setOnCancelListener(dialog -> {
+            onCancelListener.onCancel(dialog);
+            dialog.cancel();
         });
     }
 }

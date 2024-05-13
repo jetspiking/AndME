@@ -23,6 +23,9 @@ public class LauncherTilesHomeFragment extends Fragment {
     private View view;
     public LauncherTilesFragment mLauncherTilesFragment = new LauncherTilesFragment();
 
+    /**
+     * Overridden onCreateView method called when creating the view.
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -35,16 +38,15 @@ public class LauncherTilesHomeFragment extends Fragment {
         ft.add(R.id.fragment_launcher_tilehome_fl_tiles, mLauncherTilesFragment).commit();
 
         ImageView navigationView = view.findViewById(R.id.fragment_launcher_tilehome_iv_arrowbutton);
-        navigationView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MainActivity.scrollToApps();
-            }
-        });
+        navigationView.setOnClickListener(view1 -> MainActivity.scrollToApps());
 
         return view;
     }
 
+    /**
+     * Retrieve the view with pinned applications and sidebar buttons.
+     * @return View with pinned applications and sidebar buttons.
+     */
     public View getView() {
         return view;
     }

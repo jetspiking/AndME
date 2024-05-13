@@ -26,30 +26,58 @@ public class App implements Serializable {
     private int profileIndex;
     private String iconLocation;
 
+    /**
+     * Get app name.
+     * @return App name.
+     */
     public CharSequence getName() {
         return name;
     }
 
+    /**
+     * Set app name.
+     * @param name App name.
+     */
     public void setName(CharSequence name) {
         this.name = name;
     }
 
+    /**
+     * Get app package name.
+     * @return App package name.
+     */
     public CharSequence getAppPackage() {
         return appPackage;
     }
 
+    /**
+     * Set app package name.
+     * @param appPackage App package name.
+     */
     public void setAppPackage(CharSequence appPackage) {
         this.appPackage = appPackage;
     }
 
+    /**
+     * Get app icon.
+     * @return App icon.
+     */
     public Drawable getAppIcon() {
         return appIcon;
     }
 
+    /**
+     * Set app icon.
+     * @param appIcon App icon.
+     */
     public void setAppIcon(Drawable appIcon) {
         this.appIcon = appIcon;
     }
 
+    /**
+     * Cache the app icon.
+     * @param context Application context.
+     */
     public void cacheIcon(Context context) {
         if (iconLocation==null)
             new File(context.getApplicationInfo().dataDir+"/cachedApps/").mkdirs();
@@ -74,6 +102,10 @@ public class App implements Serializable {
         }
     }
 
+    /**
+     * Get the cached app icon.
+     * @return Cached app icon.
+     */
     public Bitmap getCachedIcon() {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = false;
@@ -83,19 +115,35 @@ public class App implements Serializable {
         return (cachedIcon!=null && cachedIcon.exists()) ? BitmapFactory.decodeFile(iconLocation) : null;
     }
 
+    /**
+     * Get component name.
+     * @return Component name.
+     */
     public ComponentName getComponentName() {
         return new ComponentName(this.componentPackage, this.componentClass);
     }
 
+    /**
+     * Set component name.
+     * @param componentName Component name.
+     */
     public void setComponentName(ComponentName componentName) {
         this.componentClass = componentName.getClassName();
         this.componentPackage = componentName.getPackageName();
     }
 
+    /**
+     * Get the profile index.
+     * @return Profile index.
+     */
     public int getProfileIndex() {
         return profileIndex;
     }
 
+    /**
+     * Set the profile index.
+     * @param profileIndex Profile index.
+     */
     public void setProfileIndex(int profileIndex) {
         this.profileIndex = profileIndex;
     }

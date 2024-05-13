@@ -51,12 +51,15 @@ public class LauncherApplistFragment extends Fragment implements OnItemClickedLi
     private PackageManager mPackageManager;
     private int mSelectedProfile = 0;
 
+    /**
+     * Overridden onCreateView method called when creating the view.
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_launcher_applist, container, false);
         mPackageManager = Objects.requireNonNull(getActivity()).getPackageManager();
-        initAppsList(view, container);
+        initAppsList(view);
         loadApps();
 
         ToggleButton profileToggleSwitch = view.findViewById(R.id.fragment_launcher_applist_tb_profile_toggle_switch);
@@ -78,36 +81,20 @@ public class LauncherApplistFragment extends Fragment implements OnItemClickedLi
         });
 
         ImageView backImageView = view.findViewById(R.id.fragment_launcher_applist_iv_backbutton);
-        backImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MainActivity.scrollToHome();
-            }
-        });
+        backImageView.setOnClickListener(view1 -> MainActivity.scrollToHome());
 
         ImageView editImageView = view.findViewById(R.id.fragment_launcher_applist_iv_editbutton);
-        editImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MainActivity.scrollToSettings();
-            }
-        });
+        editImageView.setOnClickListener(view12 -> MainActivity.scrollToSettings());
 
         ImageView infoImageView = view.findViewById(R.id.fragment_launcher_applist_iv_infobutton);
-        infoImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LongPressDialogFragment longPressDialogFragment = new LongPressDialogFragment(getContext(), Objects.requireNonNull(getContext()).getString(R.string.navigate_to_github));
-                longPressDialogFragment.subscribeOption1(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(AppMiscDefaults.WEB_URL));
-                        startActivity(i);
-                    }
-                });
-                longPressDialogFragment.show(0);
-            }
+        infoImageView.setOnClickListener(view13 -> {
+            LongPressDialogFragment longPressDialogFragment = new LongPressDialogFragment(getContext(), Objects.requireNonNull(getContext()).getString(R.string.navigate_to_github));
+            longPressDialogFragment.subscribeOption1(v -> {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(AppMiscDefaults.WEB_URL));
+                startActivity(i);
+            });
+            longPressDialogFragment.show(0);
         });
 
         return view;
@@ -117,8 +104,7 @@ public class LauncherApplistFragment extends Fragment implements OnItemClickedLi
         loadApps();
     }
 
-    private void initAppsList(View view, ViewGroup viewGroup) {
-        ConstraintLayout constraintLayout = view.findViewById(R.id.fragment_launcher_applist_cl_constraintlayout);
+    private void initAppsList(View view) {
         mApplistRecycler = view.findViewById(R.id.fragment_launcher_applist_rv_recyclerview);
         mLauncherApplistingAdapter = new LauncherApplistingAdapter(getContext(), mApps, this);
         mApplistRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -135,7 +121,7 @@ public class LauncherApplistFragment extends Fragment implements OnItemClickedLi
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!s.toString().equals("")) {
+                if (!s.toString().isEmpty()) {
                     filter(s.toString());
                 } else {
                     loadApps();
@@ -149,12 +135,7 @@ public class LauncherApplistFragment extends Fragment implements OnItemClickedLi
         });
 
         ImageView searchImageView = view.findViewById(R.id.fragment_launcher_applist_iv_searchbutton);
-        searchImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                searchField.setVisibility(searchField.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-            }
-        });
+        searchImageView.setOnClickListener(view1 -> searchField.setVisibility(searchField.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE));
     }
 
     private void filter(String search) {

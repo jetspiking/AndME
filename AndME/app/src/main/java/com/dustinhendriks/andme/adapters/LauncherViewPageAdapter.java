@@ -28,6 +28,11 @@ public class LauncherViewPageAdapter extends FragmentPagerAdapter {
         super(fm, behavior);
     }
 
+    /**
+     * Retrieve and construct page fragments for the launcher.
+     * @param position Page index.
+     * @return Constructed fragment.
+     */
     @NonNull
     @Override
     public Fragment getItem(int position) {
@@ -45,7 +50,10 @@ public class LauncherViewPageAdapter extends FragmentPagerAdapter {
         return null;
     }
 
-
+    /**
+     * Retrieve the amount of pages.
+     * @return Amount of pages.
+     */
     @Override
     public int getCount() {
         return NUMBER_OF_PAGES;

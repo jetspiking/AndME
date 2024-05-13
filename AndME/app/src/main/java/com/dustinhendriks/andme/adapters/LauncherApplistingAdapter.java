@@ -69,13 +69,7 @@ public class LauncherApplistingAdapter extends RecyclerView.Adapter<LauncherAppl
                     public void onClick(View v) {
                         App app = mApps.get(holder.getAdapterPosition());
                         holder.itemView.setBackgroundColor(0);
-                        LauncherTilesFragment.mTiles.add(new AppTile.Builder<AppTile>(
-                                app.getName().toString())
-                                .withBackgroundColor(-1)
-                                .withWidth(1)
-                                .withHeight(1)
-                                .withApp(app)
-                                .build());
+                        LauncherTilesFragment.mTiles.add(new AppTile(app.getName().toString(), 1, 1, app));
                         MainActivity.serializeData();
                         MainActivity.notifyDataSetTilesUpdate();
                     }

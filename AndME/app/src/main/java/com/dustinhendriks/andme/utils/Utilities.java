@@ -11,6 +11,11 @@ import android.graphics.drawable.Drawable;
  */
 public class Utilities {
 
+    /**
+     * Convert a Drawable to a Bitmap object.
+     * @param drawable Drawable to convert.
+     * @return Bitmap representation of Drawable argument.
+     */
     public static Bitmap drawableToBitmap (Drawable drawable){
         if (drawable instanceof BitmapDrawable) return ((BitmapDrawable)drawable).getBitmap();
         Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
@@ -20,6 +25,12 @@ public class Utilities {
         return bitmap;
     }
 
+    /**
+     * Convert a bitmap to a Drawable object.
+     * @param context Application context.
+     * @param bitmap Bitmap to convert.
+     * @return Drawable representation of Bitmap argument.
+     */
     public static Drawable bitmapToDrawable(Context context, Bitmap bitmap) {
         return new BitmapDrawable(context.getResources(), bitmap);
     }

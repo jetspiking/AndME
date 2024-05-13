@@ -5,6 +5,9 @@ import com.dustinhendriks.andme.utils.AppMiscDefaults;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * Application data serialization helper.
+ */
 public class AppSerializableData implements Serializable {
     public static final int NOT_UPDATED = -404;
     private ArrayList<Tile> tiles = new ArrayList<>();
@@ -20,6 +23,10 @@ public class AppSerializableData implements Serializable {
     public int SHOW_ICONS_IN_APPS_LIST = NOT_UPDATED;
     public String APPLIED_ICON_PACK_NAME = "";
 
+    /**
+     * Update the serialization data.
+     * @param tiles Tiles added to homescreen.
+     */
     public void update(ArrayList<Tile> tiles) {
         this.tiles.clear();
         this.tiles.addAll(tiles);
@@ -36,6 +43,10 @@ public class AppSerializableData implements Serializable {
         APPLIED_ICON_PACK_NAME = AppMiscDefaults.APPLIED_ICON_PACK_NAME;
     }
 
+    /**
+     * Retrieve the application tiles.
+     * @return Application tiles.
+     */
     public ArrayList<Tile> getTiles() {
         return tiles;
     }

@@ -1,8 +1,5 @@
 package com.dustinhendriks.andme.views;
 
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -24,10 +21,8 @@ import com.dustinhendriks.andme.utils.AppMiscDefaults;
 import com.dustinhendriks.andme.utils.IconPackUtils;
 import com.dustinhendriks.andme.utils.SerializationUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Consumer;
 
 /**
  * Handles creating and displaying the application settings and handling actions.
@@ -35,6 +30,9 @@ import java.util.function.Consumer;
 public class LauncherSettingsFragment extends Fragment {
     private View mSettingsView;
 
+    /**
+     * Overridden onCreateView method called when creating the view.
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,10 +41,13 @@ public class LauncherSettingsFragment extends Fragment {
         return mSettingsView;
     }
 
+    /**
+     * Load application settings.
+     */
     private void loadSettings() {
         mSettingsView.setBackgroundColor(Color.BLACK);
 
-        AppSerializableData appSerializableData = SerializationUtils.loadSerializedData(Objects.requireNonNull(getContext()));
+        AppSerializableData appSerializableData = SerializationUtils.DeserializedData(Objects.requireNonNull(getContext()));
         if (appSerializableData != null)
             AppMiscDefaults.RestoreFromSerializedData(appSerializableData);
 
@@ -114,10 +115,16 @@ public class LauncherSettingsFragment extends Fragment {
         });
     }
 
+    /**
+     * Retrieve color from hexadecimal value.
+     */
     private int getColorFromHex(String hexValue) {
         return (Integer.parseInt( hexValue.substring( 0,2 ), 16) << 24) + Integer.parseInt( hexValue.substring( 2 ), 16);
     }
 
+    /**
+     * Set color and text for item in settings menu.
+     */
     private void setViewTitleAndInput(View view, String title, String input) {
         TextView titleTextView = view.findViewById(R.id.item_launcher_inputsetting_tv_title);
         TextView inputTextView = view.findViewById(R.id.item_launcher_inputsetting_et_input);
@@ -129,6 +136,9 @@ public class LauncherSettingsFragment extends Fragment {
         inputTextView.setTextColor(Color.WHITE);
     }
 
+    /**
+     * Get String from input field.
+     */
     private String getViewInput(View view) {
         TextView inputTextView = view.findViewById(R.id.item_launcher_inputsetting_et_input);
         return inputTextView.getText().toString();

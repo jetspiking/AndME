@@ -15,32 +15,33 @@ import java.io.Serializable;
  * Handles the serialization of application launcher data.
  */
 public class SerializationUtils {
-    public static void serializeData(Context context, AppSerializableData object) {
+    /**
+     * Serialize (save) the application data.
+     * @param context Application context.
+     * @param appSerializableData Data to serialize.
+     */
+    public static void serializeData(Context context, AppSerializableData appSerializableData) {
         FileOutputStream fileOutputStream;
         try {
             fileOutputStream = context.openFileOutput(context.getString(R.string.application_storage_tag), Context.MODE_PRIVATE);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            objectOutputStream.writeObject(object);
+            objectOutputStream.writeObject(appSerializableData);
             objectOutputStream.close();
         } catch (IOException ignored)
         {}
     }
 
-    public static AppSerializableData loadSerializedData(Context context) {
-        ObjectInputStream objectInputStream = null;
-        try {
-            objectInputStream = new ObjectInputStream(context.openFileInput(context.getString(R.string.application_storage_tag)));
+    /**
+     * Deserialize (load) the application data.
+     * @param context Application context.
+     * @return Deserialized data.
+     */
+    public static AppSerializableData DeserializedData(Context context) {
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(context.openFileInput(context.getString(R.string.application_storage_tag)))) {
             Object obj = objectInputStream.readObject();
             if (obj instanceof Serializable)
                 return (AppSerializableData) obj;
-        } catch (IOException | ClassNotFoundException ignored) {}
-        finally {
-            try {
-                if (objectInputStream != null) {
-                    objectInputStream.close();
-                }
-            } catch (IOException ignored)
-            {}
+        } catch (IOException | ClassNotFoundException ignored) {
         }
         return null;
     }

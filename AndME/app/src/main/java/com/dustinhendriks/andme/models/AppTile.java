@@ -14,16 +14,32 @@ import java.io.Serializable;
  * Includes the launch function for starting an application as new activity.
  */
 public class AppTile extends Tile implements LaunchableTile<Activity>, Serializable {
-    private App app;
+    private final App app;
 
-    public AppTile(Builder builder) {
-        super(builder);
+    /**
+     * AppTile to create.
+     * @param name Tile name.
+     * @param width Tile width.
+     * @param height Tile height.
+     * @param app Linked app.
+     */
+    public AppTile(String name, int width, int height, App app) {
+        super(name, width, height);
+        this.app = app;
     }
 
+    /**
+     * Get the app.
+     * @return App.
+     */
     public App getApp() {
         return app;
     }
 
+    /**
+     * Launch the app corresponding to the tile.
+     * @param parameter Generic parameter type depending on usage.
+     */
     @Override
     public void launch(Activity parameter) {
         PackageManager packageManager = parameter.getPackageManager();
@@ -37,30 +53,6 @@ public class AppTile extends Tile implements LaunchableTile<Activity>, Serializa
         else {
             Intent launchIntent = packageManager.getLaunchIntentForPackage(app.getAppPackage().toString());
             parameter.startActivity(launchIntent);
-        }
-    }
-
-    public static class Builder<T> extends Tile.Builder<Builder<T>> {
-        private App app;
-
-        public Builder(String name) {
-            super(name);
-        }
-
-        public Builder<T> withApp(App app) {
-            this.app = app;
-            return getThis();
-        }
-
-        public AppTile build() {
-            AppTile appTile = new AppTile(this);
-            appTile.app = this.app;
-            return appTile;
-        }
-
-        @Override
-        public Builder<T> getThis() {
-            return this;
         }
     }
 }

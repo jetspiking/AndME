@@ -21,6 +21,10 @@ public class AppMiscDefaults {
     public static int ACCENT_COLOR = Color.parseColor("#009688");
     public static int TEXT_COLOR = Color.WHITE;
 
+    /**
+     * Write application data to memory.
+     * @param appSerializableData Data to apply to memory.
+     */
     public static void RestoreFromSerializedData(AppSerializableData appSerializableData) {
         TEXT_COLOR = appSerializableData.TEXT_COLOR;
         ACCENT_COLOR = appSerializableData.ACCENT_COLOR;

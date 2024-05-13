@@ -23,16 +23,25 @@ import com.dustinhendriks.andme.utils.IconPackUtils;
 import java.util.ArrayList;
 
 /**
- * The LauncherApplistingAdapter is responsible for showing the pinned applications on the homescreen.
+ * The LauncherTilesAdapter is responsible for showing the pinned applications on the homescreen.
  */
 public class LauncherTilesAdapter extends RecyclerView.Adapter<LauncherTilesAdapter.ViewHolder> {
 
-    private ArrayList<Tile> mTiles;
-    private Context mContext;
-    private OnTileActionListener mOnItemClickedListener;
-    private int mTileCount;
-    private boolean mIsTransparent;
+    private final ArrayList<Tile> mTiles;
+    private final Context mContext;
+    private final OnTileActionListener mOnItemClickedListener;
+    private final int mTileCount;
+    private final boolean mIsTransparent;
 
+    /**
+     * Create the tile adapter.
+     *
+     * @param context              Application context.
+     * @param tiles                Tiles to display.
+     * @param onTileActionListener Listener for tile events.
+     * @param spanCount            Amount of columns to display.
+     * @param isTransparent        Render tiles as transparent.
+     */
     public LauncherTilesAdapter(Context context, ArrayList<Tile> tiles, OnTileActionListener onTileActionListener, int spanCount, boolean isTransparent) {
         this.mTiles = tiles;
         this.mContext = context;
@@ -41,6 +50,9 @@ public class LauncherTilesAdapter extends RecyclerView.Adapter<LauncherTilesAdap
         this.mIsTransparent = isTransparent;
     }
 
+    /**
+     * Calculate and set tile height when creating.
+     */
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -50,6 +62,9 @@ public class LauncherTilesAdapter extends RecyclerView.Adapter<LauncherTilesAdap
         return viewHolder;
     }
 
+    /**
+     * Set name, background and (custom) icon for the tile.
+     */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Tile selectedTile = mTiles.get(position);
@@ -61,54 +76,46 @@ public class LauncherTilesAdapter extends RecyclerView.Adapter<LauncherTilesAdap
         else
             holder.mBackground.setBackgroundColor(AppMiscDefaults.ACCENT_COLOR);
 
-        if ((selectedTile instanceof AppTile)) {
-            if (((AppTile) selectedTile).getApp().getAppIcon() != null)
-                holder.mAppIcon.setImageDrawable(((AppTile) selectedTile).getApp().getAppIcon());
-            Drawable customIcon = IconPackUtils.loadIconFromPack(mContext, ((AppTile) selectedTile).getApp().getAppPackage().toString(), AppMiscDefaults.APPLIED_ICON_PACK_NAME);
-            if (customIcon != null) holder.mAppIcon.setImageDrawable(customIcon);
-        } else
-            holder.mAppIcon.setImageResource(selectedTile.getIconResource());
+        if (((AppTile) selectedTile).getApp().getAppIcon() != null)
+            holder.mAppIcon.setImageDrawable(((AppTile) selectedTile).getApp().getAppIcon());
+        Drawable customIcon = IconPackUtils.loadIconFromPack(mContext, ((AppTile) selectedTile).getApp().getAppPackage().toString(), AppMiscDefaults.APPLIED_ICON_PACK_NAME);
+        if (customIcon != null) holder.mAppIcon.setImageDrawable(customIcon);
         holder.mBackground.setAlpha(1.f - (AppMiscDefaults.OPACITY / 100.f));
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mOnItemClickedListener.clickedItem(mContext, selectedTile, holder);
-            }
-        });
-        holder.mAppIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mOnItemClickedListener.clickedItem(mContext, selectedTile, holder);
-            }
+        holder.itemView.setOnClickListener(view -> mOnItemClickedListener.clickedItem(mContext, selectedTile, holder));
+        holder.mAppIcon.setOnClickListener(view -> mOnItemClickedListener.clickedItem(mContext, selectedTile, holder));
+
+        holder.mAppIcon.setOnLongClickListener(view -> {
+            mOnItemClickedListener.longClickedItem(mContext, selectedTile, holder);
+            return true; // Consume long click event
         });
 
-        holder.mAppIcon.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                mOnItemClickedListener.longClickedItem(mContext, selectedTile, holder);
-                return true; // Consume long click event
-            }
-        });
-
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                mOnItemClickedListener.longClickedItem(mContext, selectedTile, holder);
-                return true; // Consume long click event
-            }
+        holder.itemView.setOnLongClickListener(view -> {
+            mOnItemClickedListener.longClickedItem(mContext, selectedTile, holder);
+            return true; // Consume long click event
         });
     }
 
+    /**
+     * Get item count (tile count) from the adapter.
+     *
+     * @return Amount of items (tiles).
+     */
     @Override
     public int getItemCount() {
         return mTiles.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView mName;
-        private ImageView mAppIcon;
-        private ImageView mBackground;
+    /**
+     * Representation for displaying a tile.
+     */
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final TextView mName;
+        private final ImageView mAppIcon;
+        private final ImageView mBackground;
 
+        /**
+         * A tile has a name, icon and background.
+         */
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mName = itemView.findViewById(R.id.item_launcher_tile_tv_name);

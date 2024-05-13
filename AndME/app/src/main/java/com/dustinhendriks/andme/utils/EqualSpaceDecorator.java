@@ -13,10 +13,21 @@ import androidx.recyclerview.widget.RecyclerView.ItemDecoration;
 public class EqualSpaceDecorator extends ItemDecoration {
     private final int mMargin;
 
+    /**
+     * Construct based on margin that should be applied.
+     * @param margin Space between tiles.
+     */
     public EqualSpaceDecorator(int margin) {
         this.mMargin = margin;
     }
 
+    /**
+     * Retrieve the offsets based on the margin.
+     * @param outRect Rect to receive the output.
+     * @param view    The child view to decorate
+     * @param parent  RecyclerView this ItemDecoration is decorating
+     * @param state   The current state of RecyclerView.
+     */
     @Override
     public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
         outRect.left = this.mMargin;
