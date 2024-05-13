@@ -1,5 +1,5 @@
 # <img src="https://raw.githubusercontent.com/jetspiking/AndME/main/Images/icon.png" width="64" height="64"> Android Minimal Edition Launcher 
-<img src="https://raw.githubusercontent.com/jetspiking/AndME/main/Images/HomePageLandscape.png" width="600" height="350">
+<img src="https://raw.githubusercontent.com/jetspiking/AndME/main/Images/HomePageLandscape.png" width="600">
 
 # Showcase
 <img src="https://raw.githubusercontent.com/jetspiking/AndME/main/Images/HomePage.png" width="200" height="360"> <img src="https://raw.githubusercontent.com/jetspiking/AndME/main/Images/HomePageSamsung.jpg" width="166" height="360"> <img src="https://raw.githubusercontent.com/jetspiking/AndME/main/Images/AppsPage.jpg" width="166" height="360"> <img src="https://raw.githubusercontent.com/jetspiking/AndME/main/Images/FilterPage.jpg" width="166" height="360">
