@@ -3,13 +3,18 @@ package com.dustinhendriks.andme.views;
 import android.Manifest;
 import android.app.WallpaperManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -66,6 +72,7 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
         View mLauncherView = inflater.inflate(R.layout.fragment_launcher_tiles, container, false);
 
         if (AppMiscDefaults.SHOW_SYSTEM_WALLPAPER) {
+            checkAndRequestPermissionsWallpaper();
             try {
                 WallpaperManager wallpaperManager = WallpaperManager.getInstance(getActivity());
                 ActivityCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -73,7 +80,9 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
                 if (wallpaperDrawable != null)
                     mLauncherView.setBackground(wallpaperDrawable);
                 else AppMiscDefaults.SHOW_SYSTEM_WALLPAPER = false;
-            } catch(Exception e) { AppMiscDefaults.SHOW_SYSTEM_WALLPAPER = false; }
+            } catch (Exception e) {
+                AppMiscDefaults.SHOW_SYSTEM_WALLPAPER = false;
+            }
         }
 
         mTileRecycler = mLauncherView.findViewById(R.id.fragment_launcher_tiles_rv_appgrid);
@@ -204,9 +213,10 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
      * Store the application data.
      */
     public void storeData() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            CompletableFuture.runAsync(this::triggerSave);
-        else triggerSave();
+        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            //CompletableFuture.runAsync(this::triggerSave);
+        //else
+        triggerSave();
     }
 
     /**
@@ -245,6 +255,7 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
 
     /**
      * Cache the application icons.
+     *
      * @param tiles Tiles containing the icons to cache.
      */
     private void cacheAppIcons(ArrayList<Tile> tiles) {
@@ -255,6 +266,7 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
 
     /**
      * Get the span count of tiles dependant on orientation and aspect ratio.
+     *
      * @return Span count dependant on orientation and aspect ratio.
      */
     private int getTileSpanCount() {
@@ -291,6 +303,7 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
 
     /**
      * Update the masking background view (wallpaper).
+     *
      * @param maskingView maskingView to update.
      */
     private void updateMaskingView(MaskingBackgroundView maskingView) {
@@ -300,5 +313,35 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
             maskingItems.add(new Rect(tile.getLeft(), tile.getTop(), tile.getRight(), tile.getBottom()));
         }
         maskingView.updateTileRects(maskingItems);
+    }
+
+    /**
+     * Verify if permissions were given for reading the wallpaper.
+     */
+    private void checkAndRequestPermissionsWallpaper() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (!Environment.isExternalStorageManager()) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                intent.setData(Uri.parse("package:" + requireActivity().getPackageName()));
+                startActivity(intent);
+            }
+        } else {
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(requireActivity(),
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MainActivity.REQUEST_EXTERNAL_STORAGE);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == MainActivity.REQUEST_EXTERNAL_STORAGE)
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                MainActivity.reloadLauncher();
     }
 }

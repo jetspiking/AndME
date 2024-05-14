@@ -13,10 +13,14 @@
     <string name="settings_show_navigation_bar">Show navigation bar</string>
     <string name="settings_show_system_wallpaper">Show system wallpaper</string>
     <string name="settings_show_icons_app_list">Show icons in app list</string>
-    <string name="settings_select_icon_pack">Select icon pack</string>
+    <string name="settings_select_icon_pack">Customize icons</string>
     <string name="settings_tile_span">Portrait tile span</string>
     <string name="settings_text_color">Text color</string>
     <string name="settings_background_color">Background color</string>
     <string name="settings_accent_color">Accent color</string>
     <string name="settings_save_and_overwrite">Save and overwrite settings</string>
+    <string name="settings_enter_theme_mapping">Enter theme mapping</string>
+    <string name="settings_invalid_theme_data">Invalid theme data</string>
+    <string name="settings_ok_theme_mapping">OK</string>
+    <string name="settings_cancel_theme_mapping">Cancel</string>
 </resources>

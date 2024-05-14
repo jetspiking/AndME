@@ -1,7 +1,6 @@
 package com.dustinhendriks.andme.adapters;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -18,7 +17,7 @@ import com.dustinhendriks.andme.interfaces.OnTileActionListener;
 import com.dustinhendriks.andme.models.AppTile;
 import com.dustinhendriks.andme.models.Tile;
 import com.dustinhendriks.andme.utils.AppMiscDefaults;
-import com.dustinhendriks.andme.utils.IconPackUtils;
+import com.dustinhendriks.andme.utils.IconPackLoader;
 
 import java.util.ArrayList;
 
@@ -78,7 +77,7 @@ public class LauncherTilesAdapter extends RecyclerView.Adapter<LauncherTilesAdap
 
         if (((AppTile) selectedTile).getApp().getAppIcon() != null)
             holder.mAppIcon.setImageDrawable(((AppTile) selectedTile).getApp().getAppIcon());
-        Drawable customIcon = IconPackUtils.loadIconFromPack(mContext, ((AppTile) selectedTile).getApp().getAppPackage().toString(), AppMiscDefaults.APPLIED_ICON_PACK_NAME);
+        Drawable customIcon = IconPackLoader.loadIconFromPack(mContext, ((AppTile) selectedTile).getApp().getAppPackage().toString(), AppMiscDefaults.APPLIED_ICON_PACK_NAME, AppMiscDefaults.APPLIED_ICON_PACK_BINDING);
         if (customIcon != null) holder.mAppIcon.setImageDrawable(customIcon);
         holder.mBackground.setAlpha(1.f - (AppMiscDefaults.OPACITY / 100.f));
         holder.itemView.setOnClickListener(view -> mOnItemClickedListener.clickedItem(mContext, selectedTile, holder));

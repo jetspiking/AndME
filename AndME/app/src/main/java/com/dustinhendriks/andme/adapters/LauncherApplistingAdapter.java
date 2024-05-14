@@ -50,40 +50,27 @@ public class LauncherApplistingAdapter extends RecyclerView.Adapter<LauncherAppl
         holder.mName.setText(mApps.get(holder.getAdapterPosition()).getName());
         holder.mName.setTextColor(AppMiscDefaults.TEXT_COLOR);
         holder.mAppIcon.setImageDrawable(mApps.get(position).getAppIcon());
+
         if (!AppMiscDefaults.SHOW_ICONS_IN_APPS_LIST)
             holder.mAppIcon.setVisibility(View.GONE);
         else holder.mAppIcon.setBackgroundColor(AppMiscDefaults.ACCENT_COLOR);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mOnItemClickedListener.clickedItem(mContext, mApps.get(holder.getAdapterPosition()), holder);
-            }
-        });
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                LongPressDialogFragment longPressDialogFragment = new LongPressDialogFragment(mContext, mContext.getString(R.string.pin_to_start));
-                holder.itemView.setBackgroundColor(AppMiscDefaults.ACCENT_COLOR);
-                longPressDialogFragment.subscribeOption1(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        App app = mApps.get(holder.getAdapterPosition());
-                        holder.itemView.setBackgroundColor(0);
-                        LauncherTilesFragment.mTiles.add(new AppTile(app.getName().toString(), 1, 1, app));
-                        MainActivity.serializeData();
-                        MainActivity.notifyDataSetTilesUpdate();
-                    }
-                });
-                longPressDialogFragment.subscribeCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        holder.itemView.setBackgroundColor(0);
-                    }
-                });
-                // Show dialog in the top of the screen.
-                longPressDialogFragment.show(0);
-                return true;
-            }
+
+        holder.itemView.setOnClickListener(view -> mOnItemClickedListener.clickedItem(mContext, mApps.get(holder.getAdapterPosition()), holder));
+
+        holder.itemView.setOnLongClickListener(v -> {
+            LongPressDialogFragment longPressDialogFragment = new LongPressDialogFragment(mContext, mContext.getString(R.string.pin_to_start));
+            holder.itemView.setBackgroundColor(AppMiscDefaults.ACCENT_COLOR);
+            longPressDialogFragment.subscribeOption1(v1 -> {
+                App app = mApps.get(holder.getAdapterPosition());
+                holder.itemView.setBackgroundColor(0);
+                LauncherTilesFragment.mTiles.add(new AppTile(app.getName().toString(), 1, 1, app));
+                MainActivity.serializeData();
+                MainActivity.notifyDataSetTilesUpdate();
+            });
+            longPressDialogFragment.subscribeCancelListener(dialog -> holder.itemView.setBackgroundColor(0));
+            // Show dialog in the top of the screen.
+            longPressDialogFragment.show(0);
+            return true;
         });
     }
 
@@ -93,13 +80,11 @@ public class LauncherApplistingAdapter extends RecyclerView.Adapter<LauncherAppl
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private ConstraintLayout mConstraintLayout;
         private TextView mName;
         private ImageView mAppIcon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            mConstraintLayout = itemView.findViewById(R.id.item_launcher_applisting_cl_constraintlayout);
             mName = itemView.findViewById(R.id.item_launcher_applisting_tv_appname);
             mAppIcon = itemView.findViewById(R.id.item_launcher_applisting_iv_applogo);
         }

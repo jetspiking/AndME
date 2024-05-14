@@ -1,14 +1,19 @@
 package com.dustinhendriks.andme.views;
 
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,8 +23,10 @@ import com.dustinhendriks.andme.MainActivity;
 import com.dustinhendriks.andme.R;
 import com.dustinhendriks.andme.models.AppSerializableData;
 import com.dustinhendriks.andme.utils.AppMiscDefaults;
-import com.dustinhendriks.andme.utils.IconPackUtils;
+import com.dustinhendriks.andme.utils.IconPack;
+import com.dustinhendriks.andme.utils.IconPackLoader;
 import com.dustinhendriks.andme.utils.SerializationUtils;
+import com.google.gson.Gson;
 
 import java.util.List;
 import java.util.Objects;
@@ -29,6 +36,9 @@ import java.util.Objects;
  */
 public class LauncherSettingsFragment extends Fragment {
     private View mSettingsView;
+    private String mIconPack;
+
+    private boolean mInitialSetupCall = true;
 
     /**
      * Overridden onCreateView method called when creating the view.
@@ -69,57 +79,76 @@ public class LauncherSettingsFragment extends Fragment {
         setViewTitleAndInput(showNavigationBarSettingsView, getString(R.string.settings_show_navigation_bar), String.valueOf(AppMiscDefaults.SHOW_NAVIGATION_BAR));
         setViewTitleAndInput(showSystemWallpaperSettingsView, getString(R.string.settings_show_system_wallpaper), String.valueOf(AppMiscDefaults.SHOW_SYSTEM_WALLPAPER));
 
-        List<String> iconPacks = IconPackUtils.getAvailableIconPacks();
+        List<String> iconPacks = IconPackLoader.getAvailableIconPacks();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, iconPacks);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         iconPackSpinner.setAdapter(adapter);
 
-        for(int i = 0; i < iconPacks.size(); i++)
+        for (int i = 0; i < iconPacks.size(); i++)
             if (AppMiscDefaults.APPLIED_ICON_PACK_NAME.equals(iconPacks.get(i))) {
                 iconPackSpinner.setSelection(i);
                 break;
             }
 
+        iconPackSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (mInitialSetupCall) {
+                    mInitialSetupCall = false;
+                    return;
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle(getString(R.string.settings_enter_theme_mapping));
+
+                final EditText input = new EditText(getContext());
+                input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                builder.setView(input);
+
+                builder.setPositiveButton(getString(R.string.settings_ok_theme_mapping), (dialog, which) -> {
+                    mIconPack = input.getText().toString();
+                });
+
+                builder.setNegativeButton(R.string.cancel_settings, (dialog, which) -> dialog.cancel());
+
+                builder.show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
         Button saveAndReload = mSettingsView.findViewById(R.id.fragment_launcher_content_bu_saveandreload);
         saveAndReload.setTextColor(Color.WHITE);
-        saveAndReload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LongPressDialogFragment longPressDialogFragment = new LongPressDialogFragment(getContext(), getString(R.string.settings_save_and_overwrite));
-                longPressDialogFragment.subscribeOption1(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        AppMiscDefaults.TILE_SPAN_COUNT = Integer.parseInt(getViewInput(tileCountSettingsView));
-                        AppMiscDefaults.ACCENT_COLOR = getColorFromHex(getViewInput(accentColorSettingsView));
-                        AppMiscDefaults.BACKGROUND_COLOR = getColorFromHex(getViewInput(backgroundColorSettingsView));
-                        AppMiscDefaults.TEXT_COLOR = getColorFromHex(getViewInput(textColorSettingsView));
-                        AppMiscDefaults.SHOW_ICONS_IN_APPS_LIST = Boolean.parseBoolean(getViewInput(showAppTilesSettingsView));
-                        AppMiscDefaults.SHOW_NAVIGATION_BAR = Boolean.parseBoolean(getViewInput(showNavigationBarSettingsView));
-                        AppMiscDefaults.SHOW_SYSTEM_WALLPAPER = Boolean.parseBoolean(getViewInput(showSystemWallpaperSettingsView));
-                        AppMiscDefaults.APPLIED_ICON_PACK_NAME = iconPackSpinner.getSelectedItem().toString();
-                        MainActivity.serializeData();
-                        MainActivity.reloadLauncher();
-                    }
-                });
-                longPressDialogFragment.show(0);
-            }
+        saveAndReload.setOnClickListener(view -> {
+            LongPressDialogFragment longPressDialogFragment = new LongPressDialogFragment(getContext(), getString(R.string.settings_save_and_overwrite));
+            longPressDialogFragment.subscribeOption1(v -> {
+                AppMiscDefaults.TILE_SPAN_COUNT = Integer.parseInt(getViewInput(tileCountSettingsView));
+                AppMiscDefaults.ACCENT_COLOR = getColorFromHex(getViewInput(accentColorSettingsView));
+                AppMiscDefaults.BACKGROUND_COLOR = getColorFromHex(getViewInput(backgroundColorSettingsView));
+                AppMiscDefaults.TEXT_COLOR = getColorFromHex(getViewInput(textColorSettingsView));
+                AppMiscDefaults.SHOW_ICONS_IN_APPS_LIST = Boolean.parseBoolean(getViewInput(showAppTilesSettingsView));
+                AppMiscDefaults.SHOW_NAVIGATION_BAR = Boolean.parseBoolean(getViewInput(showNavigationBarSettingsView));
+                AppMiscDefaults.SHOW_SYSTEM_WALLPAPER = Boolean.parseBoolean(getViewInput(showSystemWallpaperSettingsView));
+                AppMiscDefaults.APPLIED_ICON_PACK_NAME = iconPackSpinner.getSelectedItem().toString();
+                AppMiscDefaults.APPLIED_ICON_PACK_BINDING = mIconPack;
+                MainActivity.serializeData();
+                MainActivity.reloadLauncher();
+            });
+            longPressDialogFragment.show(0);
         });
 
         Button cancelAndClose = mSettingsView.findViewById(R.id.fragment_launcher_content_is_cancelandclose);
         cancelAndClose.setTextColor(Color.WHITE);
-        cancelAndClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MainActivity.scrollToHome();
-            }
-        });
+        cancelAndClose.setOnClickListener(view -> MainActivity.scrollToHome());
     }
 
     /**
      * Retrieve color from hexadecimal value.
      */
     private int getColorFromHex(String hexValue) {
-        return (Integer.parseInt( hexValue.substring( 0,2 ), 16) << 24) + Integer.parseInt( hexValue.substring( 2 ), 16);
+        return (Integer.parseInt(hexValue.substring(0, 2), 16) << 24) + Integer.parseInt(hexValue.substring(2), 16);
     }
 
     /**
