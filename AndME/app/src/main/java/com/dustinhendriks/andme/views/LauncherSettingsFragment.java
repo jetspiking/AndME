@@ -144,7 +144,7 @@ public class LauncherSettingsFragment extends Fragment {
                 final EditText input = new EditText(getContext());
                 input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
                 builder.setView(input);
-                if (!AppMiscDefaults.APPLIED_ICON_PACK_BINDING.isEmpty())
+                if (AppMiscDefaults.APPLIED_ICON_PACK_BINDING != null && !AppMiscDefaults.APPLIED_ICON_PACK_BINDING.isEmpty())
                     input.setText(AppMiscDefaults.APPLIED_ICON_PACK_BINDING);
                 else input.setText(DefaultIconPack.getDefaultIconPack());
 
