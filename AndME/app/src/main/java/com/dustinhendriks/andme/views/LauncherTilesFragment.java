@@ -213,10 +213,10 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
      * Store the application data.
      */
     public void storeData() {
-        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            //CompletableFuture.runAsync(this::triggerSave);
-        //else
-        triggerSave();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        CompletableFuture.runAsync(this::triggerSave);
+        else
+            triggerSave();
     }
 
     /**
@@ -324,7 +324,6 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
                 Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
                 intent.setData(Uri.parse("package:" + requireActivity().getPackageName()));
                 startActivity(intent);
-                MainActivity.reloadLauncher();
             }
         } else {
             if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -334,8 +333,13 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
                 ActivityCompat.requestPermissions(requireActivity(),
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         MainActivity.REQUEST_EXTERNAL_STORAGE);
-                MainActivity.reloadLauncher();
             }
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        MainActivity.reloadLauncher();
     }
 }
