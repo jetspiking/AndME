@@ -17,7 +17,7 @@ public class AppMiscDefaults {
     public static boolean SHOW_NAVIGATION_BAR = true;
     public static boolean SHOW_SYSTEM_WALLPAPER = false;
     public static int BACKGROUND_COLOR = Color.BLACK;
-    public static int ACCENT_COLOR = Color.parseColor("#009688");
+    public static int ACCENT_COLOR = Color.parseColor("#FF00ABA9");
     public static int TEXT_COLOR = Color.WHITE;
     public static String APPLIED_ICON_PACK_NAME = "Default";
     public static String APPLIED_ICON_PACK_BINDING;

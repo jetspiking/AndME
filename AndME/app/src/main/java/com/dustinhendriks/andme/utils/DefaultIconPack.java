@@ -6,6 +6,18 @@ public class DefaultIconPack {
      * This app list is generated using ChatGPT. It can and will contain multiple entries that link an incorrect / non-existent picture based on the included icons.
      */
     private static final String DEFAULT_THEME = "{ \"bindings\": ["
+            + "{\"packageName\": \"com.android.settings\", \"fileName\": \"settings.svg\"},"
+            + "{\"packageName\": \"com.android.vending\", \"fileName\": \"googleplay.svg\"},"
+            + "{\"packageName\": \"com.android.music\", \"fileName\": \"music.svg\"},"
+            + "{\"packageName\": \"com.android.mms\", \"fileName\": \"message-square.svg\"},"
+            + "{\"packageName\": \"com.android.gallery\", \"fileName\": \"grid.svg\"},"
+            + "{\"packageName\": \"com.google.android.photos\", \"fileName\": \"grid.svg\"},"
+            + "{\"packageName\": \"com.google.android.deskclock\", \"fileName\": \"clock.svg\"},"
+            + "{\"packageName\": \"com.android.dialer\", \"fileName\": \"phone.svg\"},"
+            + "{\"packageName\": \"com.android.camera\", \"fileName\": \"camera.svg\"},"
+            + "{\"packageName\": \"com.android.calculator\", \"fileName\": \"divide.svg\"},"
+            + "{\"packageName\": \"com.android.calculator2\", \"fileName\": \"divide.svg\"},"
+            + "{\"packageName\": \"com.android.browser\", \"fileName\": \"globe.svg\"},"
             + "{\"packageName\": \"com.android.chrome\", \"fileName\": \"googlechrome.svg\"},"
             + "{\"packageName\": \"com.facebook.katana\", \"fileName\": \"facebook.svg\"},"
             + "{\"packageName\": \"com.instagram.android\", \"fileName\": \"instagram.svg\"},"
