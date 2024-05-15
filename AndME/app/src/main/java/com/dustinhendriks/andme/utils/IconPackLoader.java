@@ -70,20 +70,7 @@ public class IconPackLoader {
      * @return Drawable representation of icon.
      */
     public static Drawable getDiskIconByName(Context context, String iconName, String iconPackName) {
-        try {
-            InputStream inputStream = context.getAssets().open("iconpacks/" + iconPackName.toLowerCase() + "/" + iconName);
-            SVG svg = SVG.getFromInputStream(inputStream);
-            inputStream.close();
-
-            Bitmap bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(bitmap);
-            svg.renderToCanvas(canvas);
-
-            BitmapDrawable bitmapDrawable = new BitmapDrawable(context.getResources(), bitmap);
-            bitmapDrawable.setColorFilter(AppMiscDefaults.TEXT_COLOR, PorterDuff.Mode.SRC_ATOP);
-            return bitmapDrawable;
-        } catch (Exception ignored) {
-        }
-        return null;
+        String uri = "iconpacks/" + iconPackName.toLowerCase() + "/" + iconName;
+        return SvgDrawable.getSvgAsDrawable(context, uri, AppMiscDefaults.TEXT_COLOR);
     }
 }
