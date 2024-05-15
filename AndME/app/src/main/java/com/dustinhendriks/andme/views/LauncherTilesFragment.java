@@ -214,7 +214,7 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
      */
     public void storeData() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-        CompletableFuture.runAsync(this::triggerSave);
+            CompletableFuture.runAsync(this::triggerSave);
         else
             triggerSave();
     }
@@ -323,7 +323,7 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
             if (!Environment.isExternalStorageManager()) {
                 Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
                 intent.setData(Uri.parse("package:" + requireActivity().getPackageName()));
-                startActivity(intent);
+                startActivityForResult(intent, MainActivity.REQUEST_WALLPAPER_PERMISSIONS);
             }
         } else {
             if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -332,7 +332,17 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
                             != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(requireActivity(),
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        MainActivity.REQUEST_EXTERNAL_STORAGE);
+                        MainActivity.REQUEST_WALLPAPER_PERMISSIONS);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == MainActivity.REQUEST_WALLPAPER_PERMISSIONS) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                MainActivity.reloadLauncher();
             }
         }
     }
@@ -340,6 +350,7 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        MainActivity.reloadLauncher();
+        if (requestCode == MainActivity.REQUEST_WALLPAPER_PERMISSIONS)
+            MainActivity.reloadLauncher();
     }
 }

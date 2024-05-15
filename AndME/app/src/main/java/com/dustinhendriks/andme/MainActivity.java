@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     public LauncherViewPageAdapter mPageAdapter;
     public static MainActivity MAIN_ACTIVITY;
 
-    public static final int REQUEST_EXTERNAL_STORAGE = 101;
+    public static final int REQUEST_WALLPAPER_PERMISSIONS = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
