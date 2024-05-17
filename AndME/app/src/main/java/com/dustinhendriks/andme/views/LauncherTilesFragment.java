@@ -213,10 +213,7 @@ public class LauncherTilesFragment extends Fragment implements OnTileActionListe
      * Store the application data.
      */
     public void storeData() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            CompletableFuture.runAsync(this::triggerSave);
-        else
-            triggerSave();
+        triggerSave();
     }
 
     /**
